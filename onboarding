@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adcelerate Onboarding – Eren</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css">
+<style>
+/* ============================================================
+   EREN ONBOARDING — Confluence-style CSS
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sidebar-width: 248px;
+  --topbar-height: 48px;
+  --color-bg: #FFFFFF;
+  --color-sidebar-bg: #F4F5F7;
+  --color-sidebar-border: #DFE1E6;
+  --color-topbar-bg: #0052CC;
+  --color-accent: #0052CC;
+  --color-accent-hover: #0065FF;
+  --color-text-heading: #172B4D;
+  --color-text-body: #42526E;
+  --color-text-muted: #6B778C;
+  --color-border: #DFE1E6;
+  --color-row-alt: #F4F5F7;
+  --color-code-bg: #F4F5F7;
+  --color-badge-live-bg: #E3FCEF;
+  --color-badge-live-text: #006644;
+  --color-badge-dev-bg: #DEEBFF;
+  --color-badge-dev-text: #0052CC;
+  --color-badge-planned-bg: #F4F5F7;
+  --color-badge-planned-text: #42526E;
+  --color-card-border: #DFE1E6;
+  --color-card-hover: #F4F5F7;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --radius: 4px;
+  --radius-lg: 8px;
+}
+
+html { font-size: 15px; }
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text-body);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
+
+/* ---- TOPBAR ---- */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--topbar-height);
+  background: var(--color-topbar-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 200;
+  gap: 12px;
+}
+.topbar-logo {
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+.topbar-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.3);
+}
+.topbar-title {
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+}
+
+/* ---- LAYOUT SHELL ---- */
+.shell {
+  display: flex;
+  padding-top: var(--topbar-height);
+  min-height: 100vh;
+}
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-sidebar-border);
+  position: fixed;
+  top: var(--topbar-height);
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 16px 0 32px;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+.sidebar-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  padding: 12px 16px 4px;
+}
+.sidebar-nav-link {
+  display: block;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--color-text-body);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.sidebar-nav-link:hover {
+  background: rgba(9,30,66,0.06);
+  color: var(--color-text-heading);
+}
+.sidebar-nav-link.active {
+  border-left-color: var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 600;
+  background: rgba(0,82,204,0.06);
+}
+
+/* ---- MAIN CONTENT ---- */
+.main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-width: 0;
+  padding: 40px 48px 80px;
+}
+
+/* ---- PAGE (section) ---- */
+.page { display: none; }
+.page.visible { display: block; }
+
+.page-content {
+  max-width: 800px;
+}
+
+/* ---- BREADCRUMB ---- */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+}
+.breadcrumb a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span { color: var(--color-text-muted); }
+
+/* ---- TYPOGRAPHY ---- */
+.page-content h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+.page-content .page-scope {
+  font-size: 15px;
+  color: var(--color-text-muted);
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+.page-content h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-top: 40px;
+  margin-bottom: 12px;
+  padding-top: 8px;
+}
+.page-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
+.page-content h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
+.page-content p {
+  margin-bottom: 12px;
+  line-height: 1.65;
+}
+.page-content ul, .page-content ol {
+  margin: 8px 0 16px 20px;
+}
+.page-content li {
+  margin-bottom: 5px;
+  line-height: 1.55;
+}
+.page-content strong { color: var(--color-text-heading); }
+.page-content a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.page-content a:hover { text-decoration: underline; }
+.page-content hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 32px 0;
+}
+
+/* ---- SECTION ANCHOR ---- */
+.section-anchor {
+  display: block;
+  margin-top: -80px;
+  padding-top: 80px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ---- TABLES ---- */
+.page-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 16px 0 24px;
+}
+.page-content th {
+  background: var(--color-sidebar-bg);
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  font-size: 13px;
+}
+.page-content td {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.page-content tr:nth-child(even) td { background: var(--color-row-alt); }
+
+/* ---- CODE ---- */
+.page-content code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--color-code-bg);
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #172B4D;
+  border: 1px solid var(--color-border);
+}
+.page-content pre {
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 16px;
+  overflow-x: auto;
+  margin: 12px 0 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.page-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+}
+
+/* ---- STATUS BADGES ---- */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+.badge-live { background: var(--color-badge-live-bg); color: var(--color-badge-live-text); }
+.badge-dev { background: var(--color-badge-dev-bg); color: var(--color-badge-dev-text); }
+.badge-planned { background: var(--color-badge-planned-bg); color: var(--color-badge-planned-text); }
+
+/* ---- FEATURE CARDS (index page) ---- */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  margin: 20px 0 32px;
+}
+.feature-card {
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+.feature-card:hover {
+  background: var(--color-card-hover);
+  border-color: #B3D4FF;
+  box-shadow: 0 1px 4px rgba(9,30,66,0.08);
+}
+.feature-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.feature-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-heading);
+}
+.feature-card-desc {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.feature-card-link {
+  font-size: 13px;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+/* ---- INFO CALLOUT ---- */
+.callout {
+  background: #DEEBFF;
+  border-left: 4px solid var(--color-accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 16px;
+  margin: 16px 0 24px;
+  font-size: 14px;
+}
+.callout.callout-warning {
+  background: #FFFAE6;
+  border-left-color: #FF8B00;
+}
+.callout.callout-tip {
+  background: #E3FCEF;
+  border-left-color: #00875A;
+}
+
+/* ---- VERTICAL TABLE (key-value pairs) ---- */
+.kv-table { margin: 12px 0 24px; }
+.kv-table .kv-row {
+  display: flex;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+}
+.kv-table .kv-key {
+  font-weight: 600;
+  color: var(--color-text-heading);
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+/* ---- TOUR BUTTON ---- */
+.tour-btn {
+  margin-left: 12px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: var(--radius);
+  color: rgba(255,255,255,0.9);
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  padding: 5px 11px;
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+.tour-btn:hover {
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.6);
+}
+
+/* ---- DRIVER.JS WELCOME MODAL ---- */
+.driver-popover.driverjs-welcome {
+  max-width: 420px !important;
+  padding: 28px 28px 20px !important;
+  text-align: center;
+}
+.driver-popover.driverjs-welcome .driver-popover-title {
+  font-size: 22px !important;
+  margin-bottom: 12px !important;
+}
+.driver-popover.driverjs-welcome .driver-popover-description {
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  color: var(--color-text-body);
+}
+.driver-popover.driverjs-welcome .driver-popover-footer {
+  justify-content: center;
+  margin-top: 20px;
+}
+.driver-popover.driverjs-welcome .driver-popover-next-btn {
+  padding: 8px 20px !important;
+  font-size: 13px !important;
+}
+
+/* ---- DRIVER.JS THEME OVERRIDES ---- */
+.driver-popover.driverjs-theme {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(9,30,66,0.22);
+  padding: 20px 20px 16px;
+  max-width: 300px;
+}
+.driver-popover.driverjs-theme .driver-popover-title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: 6px;
+}
+.driver-popover.driverjs-theme .driver-popover-description {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--color-text-body);
+  line-height: 1.55;
+}
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+.driver-popover.driverjs-theme button {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-shadow: none;
+}
+.driver-popover-footer button {
+  text-shadow: none;
+}
+.driver-popover.driverjs-theme .driver-popover-next-btn {
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  color: #fff;
+  padding: 5px 12px;
+}
+.driver-popover.driverjs-theme .driver-popover-next-btn:hover {
+  background: var(--color-accent-hover);
+}
+.driver-popover.driverjs-theme .driver-popover-prev-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text-body);
+  padding: 5px 12px;
+}
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+  color: var(--color-text-muted);
+}
+
+/* ---- SEARCH ---- */
+.topbar-search {
+  margin-left: auto;
+  position: relative;
+}
+#search-input {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  padding: 5px 10px;
+  width: 220px;
+  outline: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+#search-input::placeholder { color: rgba(255,255,255,0.55); }
+#search-input:focus {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.6);
+}
+.search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 380px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 20px rgba(9,30,66,0.16);
+  z-index: 500;
+  display: none;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.search-results.open { display: block; }
+.search-result-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 13px;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--color-row-alt); }
+.search-result-page {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+.search-result-snippet { color: var(--color-text-body); line-height: 1.45; }
+.search-no-results { padding: 14px 14px; color: var(--color-text-muted); font-size: 13px; }
+mark {
+  background: #FFF0B3;
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* ---- READING CHECKLIST ---- */
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+}
+.sidebar-nav-item .sidebar-nav-link {
+  flex: 1;
+}
+.page-check {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 14px;
+  transition: background 0.1s, border-color 0.1s;
+  position: relative;
+  background: #fff;
+}
+.page-check:checked {
+  background: #00875A;
+  border-color: #00875A;
+}
+.page-check:checked::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0px;
+  width: 7px;
+  height: 4px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg);
+}
+
+/* ---- COLLAPSIBLE SECTIONS ---- */
+.page-content h2[data-collapsible] {
+  cursor: pointer;
+  user-select: none;
+}
+.page-content h2[data-collapsible]::after {
+  content: '▾';
+  font-size: 13px;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  margin-left: 8px;
+  display: inline-block;
+  transition: transform 0.2s;
+  vertical-align: middle;
+}
+.page-content h2[data-collapsible].h2-collapsed::after {
+  transform: rotate(-90deg);
+}
+.section-body {
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+
+/* ---- COPY ON CLICK ---- */
+.page-content code {
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.page-content code:hover {
+  background: #E8F0FF;
+  border-color: #B3D4FF;
+}
+.page-content code.code-copied {
+  background: #E3FCEF;
+  border-color: #00875A;
+  color: #006644;
+}
+.copy-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #172B4D;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.18s, transform 0.18s;
+  pointer-events: none;
+}
+.copy-toast.show { opacity: 1; transform: translateY(0); }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 24px 20px 60px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  #search-input { width: 160px; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="topbar-logo">Adcelerate</span>
+  <div class="topbar-divider"></div>
+  <span class="topbar-title">Adcelerate Onboarding – Eren</span>
+  <div class="topbar-search">
+    <input id="search-input" type="text" placeholder="Search…" autocomplete="off" spellcheck="false">
+    <div id="search-results" class="search-results"></div>
+  </div>
+  <button id="tour-btn" class="tour-btn" title="Take the guided tour">✦ Tour</button>
+</div>
+<div class="shell">
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link active" href="#page-index" data-target="page-index">Onboarding</a><input type="checkbox" class="page-check" data-page="page-index"></div>
+  <div class="sidebar-section-label">Features</div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-rules-automation" data-target="page-rules-automation">Rules Automation</a><input type="checkbox" class="page-check" data-page="page-rules-automation"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-creative-pipeline" data-target="page-creative-pipeline">Creative Pipeline</a><input type="checkbox" class="page-check" data-page="page-creative-pipeline"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-sync-creatives" data-target="page-sync-creatives">Sync Creatives</a><input type="checkbox" class="page-check" data-page="page-sync-creatives"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-copy-ads" data-target="page-copy-ads">Copy Ads</a><input type="checkbox" class="page-check" data-page="page-copy-ads"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-campaign-creation" data-target="page-campaign-creation">Campaign Creation</a><input type="checkbox" class="page-check" data-page="page-campaign-creation"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-performance-tracking" data-target="page-performance-tracking">Performance Tracking</a><input type="checkbox" class="page-check" data-page="page-performance-tracking"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-marketing-analytics-times" data-target="page-marketing-analytics-times">Marketing Analytics Times</a><input type="checkbox" class="page-check" data-page="page-marketing-analytics-times"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-ip-shield" data-target="page-ip-shield">IP Shield</a><input type="checkbox" class="page-check" data-page="page-ip-shield"></div>
+  <div class="sidebar-section-label">Reference</div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-manifesto" data-target="page-manifesto">Manifesto</a><input type="checkbox" class="page-check" data-page="page-manifesto"></div>
+  <div class="sidebar-nav-item"><a class="sidebar-nav-link" href="#page-general-settings" data-target="page-general-settings">General Settings</a><input type="checkbox" class="page-check" data-page="page-general-settings"></div>
+</nav>
+<main class="main" id="main-content">
+<section id="page-index" class="page visible" data-label="Onboarding" data-group="">
+  <div class="page-content">
+
+    <h1>Adcelerate Onboarding – Eren</h1>
+    <p class="page-scope">Welcome to the team. This is your starting point for getting up to speed on Adcelerate and the broader context around it.</p>
+
+    <!-- 1. ABOUT CODEWAY -->
+    <span class="section-anchor" id="codeway"></span>
+    <h2>1. About Codeway</h2>
+    <p>Codeway is a mobile app company building and scaling consumer apps across multiple verticals. The company operates a large portfolio of apps, each managed by a dedicated marketing team focused on paid user acquisition.</p>
+
+    <table>
+      <thead><tr><th>Vertical</th><th>Example Apps</th></tr></thead>
+      <tbody>
+        <tr><td>Education</td><td>Learna AI, Bible Path, IQ Masters, Nerd AI, Sparkle, Coinwise</td></tr>
+        <tr><td>AI Creativity (Wishlabs)</td><td>Retake, Pixelup, Facedance, Wonder, Video AI, Interio</td></tr>
+        <tr><td>Utilities &amp; Productivity</td><td>Cleanup, Heartin, Fitpath, Ask AI, TypeAI, Smart Noter</td></tr>
+        <tr><td>Media</td><td>Dramapops</td></tr>
+        <tr><td>Wellness</td><td>Sleepway, Shefit, Eatwise, Muscleup, Mindway, Couples</td></tr>
+      </tbody>
+    </table>
+
+    <p>Codeway runs performance marketing (paid ads) as its primary growth engine. This is the business context that gives Adcelerate its reason to exist.</p>
+
+    <!-- 2. THE MARKETING TEAM -->
+    <span class="section-anchor" id="team"></span>
+    <h2>2. The Marketing Team – Our Users</h2>
+    <p>Adcelerate is an <strong>internal tool</strong> built for Codeway's own performance marketing/growth teams. Understanding these users is fundamental to everything we build.</p>
+
+    <h3>Performance Marketing / UA Managers</h3>
+    <ul>
+      <li>Run paid campaigns on Meta, TikTok, Google, AppLovin, and Snapchat</li>
+      <li>Primary day-to-day users of Adcelerate</li>
+      <li>Goals: maximize ROAS, minimize cost per purchase (CPP), scale winning creatives fast, cut losing ones faster</li>
+      <li>Pain points: tool fragmentation, manual repetitive tasks, slow reaction to performance signals</li>
+    </ul>
+
+    <h3>Marketing Art / Creative Team</h3>
+    <ul>
+      <li>Produce the video and image creatives that go into campaigns</li>
+      <li>Have their own tools and workflow but their output feeds directly into Adcelerate</li>
+    </ul>
+
+    <p>The team is distributed. Most of the UA team is based in Turkey (UTC+3). This matters for scheduling, timezone assumptions in the product, and communication patterns.</p>
+
+    <h3>Key Contacts</h3>
+    <table>
+      <thead><tr><th>Name</th><th>Role</th><th>Vertical</th></tr></thead>
+      <tbody>
+        <tr><td>İrem Dilaver</td><td>Lead Growth Manager</td><td>Utilities &amp; Productivity</td></tr>
+        <tr><td>Abdullah Yıldız</td><td>Head of Growth</td><td>Education</td></tr>
+        <tr><td>Alexander Frass</td><td>Senior Product Manager</td><td>Adcelerate</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 3. WHAT IS ADCELERATE -->
+    <span class="section-anchor" id="product"></span>
+    <h2>3. What is Adcelerate?</h2>
+    <p>Adcelerate is a <strong>unified performance marketing platform</strong> built to replace the fragmented stack of tools Codeway's marketing teams previously used. Instead of jumping between ad managers, spreadsheets, Dropbox, and third-party tools, everything lives in one place.</p>
+
+    <p><strong>The core problem it solves:</strong> Marketing teams waste time and money because their workflows are fragmented. Creative management, campaign launching, automation, and analytics live in different tools with no shared data layer. Slow reaction times cost real ad budget.</p>
+
+    <h3>The Six Stages of the Unified Workflow</h3>
+    <table>
+      <thead><tr><th>Stage</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Strategy</strong></td><td>Media planning and budget forecasting</td></tr>
+        <tr><td><strong>Creative Ops</strong></td><td>Asset management and syncing to platforms</td></tr>
+        <tr><td><strong>Implementation</strong></td><td>Campaign templates and naming convention automation</td></tr>
+        <tr><td><strong>Activation</strong></td><td>Launching and copying campaigns across platforms</td></tr>
+        <tr><td><strong>Automation</strong></td><td>Rules engine for scaling winners and killing losers</td></tr>
+        <tr><td><strong>Intelligence</strong></td><td>Performance tracking, analytics, and AI reporting</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Current status:</strong> Adcelerate is live and in active daily use. It is an internal product today, with a long-term goal of evolving into an external B2B SaaS platform.</p>
+
+    <div class="callout callout-tip">
+      Want more context on the vision, market positioning, and product principles? Read the full <a href="#page-manifesto">Adcelerate Manifesto</a>.
+    </div>
+
+    <!-- 4. FEATURE OVERVIEW -->
+    <span class="section-anchor" id="features"></span>
+    <h2>4. Feature Overview</h2>
+    <p>Below is every current Adcelerate feature. Click any card to read the full spec.</p>
+
+    <div class="feature-grid">
+
+      <a class="feature-card" href="#page-sync-creatives">
+        <div class="feature-card-header">
+          <span class="feature-card-title">Sync Creatives</span>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="feature-card-desc">Automatically distributes creative assets from Dropbox to Meta, TikTok, YouTube, Google Ads, and AppLovin. Runs every 3 hours. Feeds new creatives directly into the Creative Pipeline.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+      <a class="feature-card" href="#page-creative-pipeline">
+        <div class="feature-card-header">
+          <span class="feature-card-title">Creative Pipeline</span>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="feature-card-desc">Structured board tracking every creative from upload through purchase testing, winning, boost, and main. Metrics (CPP, CPI, spend, ROAS) refresh hourly. Replaces spreadsheet-based creative tracking.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+      <a class="feature-card" href="#page-campaign-creation">
+        <div class="feature-card-header">
+          <span class="feature-card-title">Campaign Creation</span>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="feature-card-desc">Six-step wizard for launching full campaign hierarchies on Meta and TikTok. Template-based, supports AI copy translation, and reports partial failures clearly.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+      <a class="feature-card" href="#page-copy-ads">
+        <div class="feature-card-header">
+          <span class="feature-card-title">Copy Ads</span>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="feature-card-desc">Bulk ad duplication tool. Copy creatives into multiple ad sets across Meta and TikTok in one operation. Handles duplicate detection and reports per-ad results with retry.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+      <a class="feature-card" href="#page-rules-automation">
+        <div class="feature-card-header">
+          <span class="feature-card-title">Rules Automation</span>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="feature-card-desc">Automation engine for campaign management. Define rules with conditions (spend, ROAS, CPP) and actions (budget change, pause, copy). Runs on schedule. Also supports AI/LLM natural language mode.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+      <a class="feature-card" href="#page-performance-tracking">
+        <div class="feature-card-header">
+          <span class="feature-card-title">Performance Tracking</span>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="feature-card-desc">Unified analytics dashboard powered by BigQuery. Ingests cost data from all major platforms hourly and joins it with Adjust attribution data. Supports saved queries and automation rule creation from results.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+      <a class="feature-card" href="#page-marketing-analytics-times">
+        <div class="feature-card-header">
+          <span class="feature-card-title">Marketing Analytics Times</span>
+          <span class="badge badge-live">Live</span>
+        </div>
+        <p class="feature-card-desc">AI-powered newspaper-style dashboard delivering daily performance summaries per app. Includes Budget Tracker with Slack alerts and Looker integration for deeper BI analysis.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+      <a class="feature-card" href="#page-ip-shield">
+        <div class="feature-card-header">
+          <span class="feature-card-title">IP Shield</span>
+          <span class="badge badge-dev">In Dev</span>
+        </div>
+        <p class="feature-card-desc">One-click IP infringement reports via the Meta API, replacing a manual 5-step process. Includes escalation reports (requesting page takedowns) for competitors that repeatedly copy our ads.</p>
+        <span class="feature-card-link">Read full spec &rarr;</span>
+      </a>
+
+    </div>
+
+    <h3>Supported Ad Platforms</h3>
+    <table>
+      <thead><tr><th>Platform</th><th>Support Level</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta / Facebook</strong></td><td>Primary platform. Fully supported across all features.</td></tr>
+        <tr><td><strong>TikTok</strong></td><td>Broadly supported. Some features in testing.</td></tr>
+        <tr><td><strong>Google Ads</strong></td><td>Performance data queryable. No write actions.</td></tr>
+        <tr><td><strong>AppLovin</strong></td><td>Sync and performance tracking supported. Automation on roadmap.</td></tr>
+        <tr><td><strong>Snapchat</strong></td><td>Performance tracking only. Longer-term roadmap.</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 5. ENVIRONMENTS -->
+    <span class="section-anchor" id="environments"></span>
+    <h2>5. Environments</h2>
+    <p>Adcelerate has two environments:</p>
+    <table>
+      <thead><tr><th>Environment</th><th>URL</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Production</strong></td><td><code>https://marketing-automation-panel.cerebroapi.com</code></td></tr>
+        <tr><td><strong>Staging</strong></td><td><code>https://marketing-automation-panel-staging.cerebroapi.com</code></td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warning">
+      <strong>Important:</strong> Staging is a direct mirror of production. It connects to the same backend services, databases, and ad platform APIs. This means any action taken on staging — pausing ads, changing budgets, launching campaigns, running automation rules — <strong>affects real campaigns and real ad spend</strong>. Treat staging with the same care as production. It exists for UI testing and verification, not as a sandbox.
+    </div>
+
+    <!-- 6. FEATURE TOGGLES -->
+    <span class="section-anchor" id="feature-toggles"></span>
+    <h2>6. Feature Toggles</h2>
+    <p>Adcelerate uses a lightweight, URL-based feature toggle system to gate unreleased or experimental features. There is no admin panel — toggles are activated via query parameters in the URL.</p>
+
+    <h3>How It Works</h3>
+    <table>
+      <thead><tr><th>Prefix</th><th>Scope</th><th>Storage</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><code>enable-</code></td><td>Current browser tab only</td><td>sessionStorage</td><td><code>?enable-ip-shield=true</code></td></tr>
+        <tr><td><code>persist-</code></td><td>Permanent (survives tab close)</td><td>localStorage</td><td><code>?persist-ip-shield=true</code></td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>Setting a value to <code>false</code> removes the toggle (e.g. <code>?enable-ip-shield=false</code>).</li>
+      <li>Toggles are checked at page load and on every route navigation, so adding them to any URL is enough.</li>
+    </ul>
+
+    <h3>Currently Used Toggles</h3>
+    <table>
+      <thead><tr><th>Toggle name</th><th>What it gates</th></tr></thead>
+      <tbody>
+        <tr><td><code>ip-shield</code></td><td>Shows the IP Shield section in the sidebar and home grid</td></tr>
+        <tr><td><code>tiktok-automation-rules</code></td><td>Enables TikTok as a platform option in the Rules Automation builder</td></tr>
+        <tr><td><code>llm-automation-rules</code></td><td>Enables the AI/LLM mode option in the Rules Automation builder</td></tr>
+      </tbody>
+    </table>
+
+    <!-- 7. PRODUCT PRINCIPLES -->
+    <span class="section-anchor" id="principles"></span>
+    <h2>7. Product Principles</h2>
+    <p>These principles guide every product decision:</p>
+    <ul>
+      <li><strong>We are user zero.</strong> If it wouldn't help Codeway's own marketing team, it shouldn't exist.</li>
+      <li><strong>Design-led for performance.</strong> Powerful tools must also be easy to use.</li>
+      <li><strong>Precision over velocity.</strong> Mistakes cost real ad budget. We don't ship incomplete features.</li>
+      <li><strong>Data over intuition.</strong> Every feature needs traceable success metrics.</li>
+      <li><strong>Fail fast, iterate with intention.</strong> Validate hypotheses quickly, pivot when wrong.</li>
+      <li><strong>We win only when the user wins.</strong> Success = positive ROAS and less time wasted, not features shipped.</li>
+    </ul>
+
+    <!-- 8. HOW WE WORK -->
+    <span class="section-anchor" id="how-we-work"></span>
+    <h2>8. How We Work</h2>
+
+    <h3>Project Management</h3>
+    <p>We use <strong>Notion</strong> as the primary project management and documentation tool.</p>
+    <p>Here is the link to the Notion board: <a href="https://www.notion.so/codewayco/Marketing-x-Cerebro-Projects-ADCELERATE-1260ca597c89807b9cd8fd92b5ee4200" target="_blank">Marketing Automation Board</a></p>
+
+    <h3>Communication</h3>
+    <p><strong>Slack</strong> is the main communication channel. The automation rules feature also posts notifications directly to Slack, so it's embedded in the product experience for users too.</p>
+
+    <h3>Slack Channels</h3>
+    <table>
+      <thead><tr><th>Channel</th><th>Who's in it</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>#adcelerate</strong></td>
+          <td>All Adcelerate users</td>
+          <td>General communication with the full user base. Announcements, releases, tips.</td>
+        </tr>
+        <tr>
+          <td><strong>#adcelerate-errors</strong></td>
+          <td>All Adcelerate users</td>
+          <td>Automatic error reporting. Users can opt in to have Adcelerate post errors directly to this channel.</td>
+        </tr>
+        <tr>
+          <td><strong>#adcelerate-all-teams</strong></td>
+          <td>Core users + team members</td>
+          <td>Higher-level communication — product updates, strategy, cross-team coordination.</td>
+        </tr>
+        <tr>
+          <td><strong>#adcelerate-growth-core</strong></td>
+          <td>Team + Abdullah &amp; İrem Dilaver</td>
+          <td>Inner circle channel. Where we discuss open questions, doubts, and decisions with our key stakeholders.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Key Relationships</h3>
+    <p>As PM, you will work closely with:</p>
+    <ul>
+      <li><strong>UA/Performance Marketing managers</strong> — the primary users; your main source of feedback and validation</li>
+      <li><strong>Marketing Art/Creative leads</strong> — feed into the Creative Pipeline; important context for creative ops features</li>
+      <li><strong>İsmail Enes Kırlı</strong> (Sr. Software Engineer) — one of the two developers who own the Adcelerate codebase</li>
+      <li><strong>Esra Can</strong> (Full Stack Developer) — one of the two developers who own the Adcelerate codebase</li>
+      <li><strong>İrem Dilaver</strong> (Lead Growth Manager, Utilities &amp; Productivity) — worked as PM on Adcelerate before; key stakeholder on the UA side</li>
+      <li><strong>Abdullah Yıldız</strong> (Head of Growth, Education) — worked as PM on Adcelerate before; key stakeholder on the UA side</li>
+    </ul>
+
+    <h3>Feedback Loop</h3>
+    <p>User feedback comes primarily through:</p>
+    <ul>
+      <li>Direct Slack conversations with UA managers</li>
+      <li>Observed behavior in meetings and workflow shadowing</li>
+      <li>Quantitative usage data via GCP Logs and DataDog</li>
+    </ul>
+
+    <!-- 9. KEY CONCEPTS -->
+    <span class="section-anchor" id="concepts"></span>
+    <h2>9. Nice Concepts to Know</h2>
+
+    <h3>Country Tier System</h3>
+    <p>Countries are grouped into tiers for targeting and analysis. These tier codes appear throughout the product — in campaign naming, rule targeting, and analytics.</p>
+    <table>
+      <thead><tr><th>Tier</th><th>Coverage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>US</strong></td><td>United States only</td></tr>
+        <tr><td><strong>T1</strong></td><td>AU, NZ, GB, CA</td></tr>
+        <tr><td><strong>T2</strong></td><td>Eastern Europe, Israel, South Africa, and others</td></tr>
+        <tr><td><strong>T2-SEA</strong></td><td>Singapore, HK, Malaysia, Thailand, Indonesia, Philippines, Taiwan, Vietnam</td></tr>
+        <tr><td><strong>EU-1 / EU-2</strong></td><td>Western and Northern Europe</td></tr>
+        <tr><td><strong>WO_AR</strong></td><td>Gulf countries (AE, BH, QA, KW, SA, OM)</td></tr>
+        <tr><td><strong>WO_ES-1/2</strong></td><td>Spanish-speaking Americas</td></tr>
+        <tr><td><strong>T3 / T4</strong></td><td>Emerging markets</td></tr>
+        <tr><td><strong>JP / KR / BR</strong></td><td>Japan, Korea, Brazil (standalone)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Campaign Naming Convention</h3>
+    <p>All campaigns follow a standardized naming format using underscore-separated parameters:</p>
+    <pre><code>appname_camptype_platform_os_geo_creative_perf-goal_additional_date</code></pre>
+    <p>Example: <code>cleaner_wcon_fb_ios_wo_lang_purchase_ink_dt_ppmax_010925</code></p>
+    <p>You will see these names everywhere — in the pipeline, in rule conditions, in analytics. Understanding the convention is important for interpreting what you see in the product.</p>
+    <p><a href="https://docs.google.com/spreadsheets/d/1jZkfj_Vqe4RrFfyCQoGA-AjMm3EaINxPi1zLhII6Gss/edit?gid=0#gid=0" target="_blank">Full naming convention reference (Google Sheets) &rarr;</a></p>
+
+
+  </div>
+</section>
+
+<section id="page-rules-automation" class="page" data-label="Rules Automation" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Rules Automation</span>
+    </div>
+    <h1>Rules Automation <span class="badge badge-live">Live</span></h1>
+    <p class="page-scope">Automated rules engine that evaluates campaign performance against configurable conditions and executes budget, pause, and copy actions.</p>
+
+    <span class="section-anchor" id="ra-summary"></span>
+    <h2>Overview</h2>
+    <p>Marketing teams managing paid user acquisition campaigns spend significant manual effort monitoring performance metrics and making repetitive budget and campaign-status decisions across ad platforms. Late reactions to underperforming creatives waste ad spend; slow scaling of winners leaves revenue on the table.</p>
+    <p><strong>Rules Automation</strong> lets performance marketers define automated rules that continuously evaluate campaign performance data against configurable conditions and execute actions — such as adjusting budgets, pausing campaigns, or duplicating high performers — without manual intervention. Optionally, an AI-powered mode lets users describe their optimization intent in natural language, and a large language model makes per-target decisions on their behalf.</p>
+
+    <span class="section-anchor" id="ra-goals"></span>
+    <h2>2. Goals &amp; Success Metrics</h2>
+    <table>
+      <thead><tr><th>Goal</th><th>Success Metric</th></tr></thead>
+      <tbody>
+        <tr><td>Reduce manual campaign management time</td><td>Decrease in avg. time-to-action on threshold breaches</td></tr>
+        <tr><td>Prevent wasted ad spend</td><td>Reduction in spend on campaigns exceeding cost thresholds</td></tr>
+        <tr><td>Scale winning campaigns faster</td><td>Time from performance signal to budget increase</td></tr>
+        <tr><td>Improve team visibility into automated actions</td><td>Slack notification adoption &amp; engagement rate</td></tr>
+        <tr><td>Enable knowledge sharing across the team</td><td>Template gallery usage and clone rate</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="ra-platforms"></span>
+    <h2>3. Supported Platforms</h2>
+    <table>
+      <thead><tr><th>Platform</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta / Facebook</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Primary platform. All actions available.</td></tr>
+        <tr><td><strong>TikTok</strong></td><td><span class="badge badge-dev">Backend ready</span></td><td>Backend supports budget +/-, pause. Not yet exposed in the frontend pending further testing.</td></tr>
+        <tr><td><strong>Snapchat</strong></td><td><span class="badge badge-planned">Roadmap</span></td><td>Stub implementations only.</td></tr>
+        <tr><td><strong>AppLovin</strong></td><td><span class="badge badge-planned">Roadmap</span></td><td>Stub implementations only.</td></tr>
+        <tr><td><strong>Google</strong></td><td><span class="badge badge-planned">Query only</span></td><td>Performance data can be queried, but no actions are supported.</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="ra-deep-dives"></span>
+    <h2>4. Feature Deep Dives</h2>
+
+    <h3>Rule Types &amp; Conditions — how rules decide</h3>
+    <p>Two evaluation modes:</p>
+    <ul>
+      <li><strong>Deterministic rule-based:</strong> conditions with grouped AND/OR logic, metrics, dynamic thresholds, and configurable time windows.</li>
+      <li><strong>AI/LLM mode:</strong> users describe optimization intent in natural language; a large language model makes per-target decisions on their behalf.</li>
+    </ul>
+
+    <h3>Targeting — what rules act on</h3>
+    <p>Rules can target different levels of the ad hierarchy: Campaign, Adset, Ad, or Creative. Supports both manual static selection and dynamic name-matching filters that automatically pick up new targets as campaigns are created.</p>
+
+    <h3>Actions &amp; Budget Management — what rules do</h3>
+    <p>When conditions are met, rules can:</p>
+    <ul>
+      <li>Increase or decrease budgets (by percentage or fixed amount)</li>
+      <li>Pause campaigns, ad sets, or ads</li>
+      <li>Copy high-performing campaigns</li>
+      <li>Exclude countries from targeting</li>
+    </ul>
+    <p>Budget safety limits with auto-pause guards prevent runaway spend from automation errors.</p>
+
+    <h3>Scheduling &amp; Execution — when and how rules run</h3>
+    <p>Rules evaluate on configurable schedules: every 6 hours, daily, or weekly. Cooldown mechanics prevent the same action from firing repeatedly. A dry-run / test mode lets users safely validate a rule before it takes live actions.</p>
+
+    <h3>Slack Notifications — alerting system</h3>
+    <p>Per-rule Slack integration with configurable channels and multiple notification types: action executed, evaluation summary, budget limit hit, and LLM reasoning. Notifications include clickable Meta Ads Manager links for instant context.</p>
+
+    <h3>Automation Templates</h3>
+    <p>A template gallery in the UI allows users to share and reuse rule configurations. Any drafted rule can be saved as a template with a name and description. Other team members can browse the gallery and instantiate rules from templates.</p>
+
+    <span class="section-anchor" id="ra-architecture"></span>
+    <h2>5. Technical Architecture</h2>
+    <table>
+      <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+      <tbody>
+        <tr><td>Performance Data</td><td>Google BigQuery (SQL queries built dynamically per rule)</td></tr>
+        <tr><td>Rule Storage</td><td>Firebase / Firestore (environment-isolated: prod, staging, dev)</td></tr>
+        <tr><td>Scheduler</td><td>Node.js cron job running every hour</td></tr>
+        <tr><td>Platform APIs</td><td>Meta Marketing API, TikTok Ads API</td></tr>
+        <tr><td>LLM</td><td>OpenAI API</td></tr>
+        <tr><td>Notifications</td><td>Slack Web API (bot token)</td></tr>
+        <tr><td>Authentication</td><td>Firebase Auth + API key middleware</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="ra-limitations"></span>
+    <h2>6. Known Limitations &amp; Future Considerations</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Current State</th><th>Future</th></tr></thead>
+      <tbody>
+        <tr><td>Creative-level actions</td><td>Evaluation + notification only</td><td>Explore adding pause/budget actions at creative level</td></tr>
+        <tr><td>TikTok in UI</td><td>Backend ready, frontend hidden</td><td>Expose after further testing</td></tr>
+        <tr><td>Snapchat &amp; AppLovin</td><td>Stub implementations</td><td>Longer-term roadmap</td></tr>
+        <tr><td>Timezone</td><td>Hardcoded UTC+3</td><td>Sufficient for current single-region deployment</td></tr>
+        <tr><td>Budget limit resume</td><td>Manual re-activation required</td><td>Consider auto-resume or "notify and continue" option</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="page-creative-pipeline" class="page" data-label="Creative Pipeline" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Creative Pipeline</span>
+    </div>
+    <h1>Creative Pipeline <span class="badge badge-live">Live</span></h1>
+    <p class="page-scope">Structured system managing ad creatives from upload through testing, scaling, and long-term use across Meta and TikTok.</p>
+
+    <span class="section-anchor" id="cp-overview"></span>
+    <h2>Overview</h2>
+    <p>The Creative Pipeline is a structured system that manages ad creatives from first upload through testing, scaling, and long-term use. It provides a clear path that every creative follows so users always know which creatives are untested, which are in a test, which won, and which are running in boost or main campaigns.</p>
+    <p>Instead of tracking creatives in spreadsheets or memory, the pipeline:</p>
+    <ul>
+      <li><strong>Organizes creatives by stage:</strong> see what is ready to test, what is in a purchase test, and what is in boost or main.</li>
+      <li><strong>Tracks performance metrics</strong> (CPP, CPI, Spend, ROAS) per campaign, updated hourly.</li>
+      <li><strong>Keeps a full history</strong> of every move (archive, restore, create test, move to winner, move to kill, etc.) with timestamp and user.</li>
+      <li><strong>Supports Meta and TikTok separately:</strong> each creative has its own pipeline state per platform.</li>
+    </ul>
+
+    <span class="section-anchor" id="cp-two-pipelines"></span>
+    <h2>Two Independent Pipelines: Meta and TikTok</h2>
+    <p>Each creative has <strong>two independent pipelines</strong>: one for Meta and one for TikTok.</p>
+    <ul>
+      <li>A creative can be in "Purchase Test" on Meta and "No Test" on TikTok <strong>at the same time</strong>.</li>
+      <li>Archive and restore actions are <strong>per platform</strong>: removing a creative from one platform's pipeline does not affect the other.</li>
+      <li>Every stage transition, campaign creation, and metric update is scoped to a single platform.</li>
+    </ul>
+
+    <span class="section-anchor" id="cp-stages"></span>
+    <h2>Pipeline Stages</h2>
+    <p>A creative is always in exactly <strong>one stage per platform</strong>:</p>
+    <table>
+      <thead><tr><th>Stage</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><strong>No Test</strong></td><td>In the pipeline but not yet in a purchase test. Ready to be added to a test.</td></tr>
+        <tr><td><strong>Purchase Test</strong></td><td>Currently in an active purchase test campaign (competing with other creatives).</td></tr>
+        <tr><td><strong>Winner</strong></td><td>Purchase test ended and this creative was marked as the winner. Ready for boost.</td></tr>
+        <tr><td><strong>Loser</strong></td><td>Purchase test ended and this creative was marked as a loser.</td></tr>
+        <tr><td><strong>Boost</strong></td><td>In a boost campaign (short scale test before main).</td></tr>
+        <tr><td><strong>Main</strong></td><td>In at least one main campaign. A creative can have multiple main campaigns over time.</td></tr>
+        <tr><td><strong>Kill</strong></td><td>Was in boost but was marked to kill (underperforming). Shown as "Boost Kills".</td></tr>
+        <tr><td><strong>Archived</strong></td><td>Removed from the active pipeline. Can be restored back to No Test.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Stage Flow</h3>
+    <pre><code>No Test → Purchase Test → Winner → Boost → Main
+                        → Loser
+                                 → Boost → Kill</code></pre>
+    <p>Archive and restore only from <strong>No Test</strong>. Each platform tracks stage independently.</p>
+
+    <span class="section-anchor" id="cp-lifecycle"></span>
+    <h2>Lifecycle Summary</h2>
+    <ol>
+      <li><strong>Creatives enter the pipeline:</strong> synced from Dropbox via Sync Creatives. They start in No Test for Meta and/or TikTok.</li>
+      <li><strong>Run purchase tests:</strong> drag creatives into groups, launch, and let them compete.</li>
+      <li><strong>Decide winners and losers:</strong> stop the test and use metrics to inform the decision.</li>
+      <li><strong>Scale winners:</strong> launch boost, then optionally move to main. Kill underperformers from boost.</li>
+      <li><strong>Metrics stay up to date:</strong> refreshed every hour.</li>
+      <li><strong>Archive creatives that don't need testing:</strong> restore from Creative Archive to reuse later.</li>
+    </ol>
+
+    <span class="section-anchor" id="cp-workflows"></span>
+    <h2>Core Workflows</h2>
+
+    <h3>Purchase Test</h3>
+    <ol>
+      <li>Drag creatives from No Test into groups on the test launch area.</li>
+      <li>Click <strong>LAUNCH</strong>: test creation requests are sent in parallel across all groups for faster execution.</li>
+      <li>Let the test run and accumulate data.</li>
+      <li><strong>Stop the purchase test</strong> from the Active Purchase Tests column.</li>
+      <li>In the stop dialog, review <strong>Spend, ROAS, CPI, and CPP</strong> for each creative.</li>
+      <li>Assign each creative as <strong>Winner</strong> or <strong>Loser</strong>.</li>
+    </ol>
+
+    <div class="callout callout-warning">
+      <strong>Error handling during test creation:</strong> If a creative encounters an error, it stays in No Test and the campaign is turned off automatically. A visual indicator and tooltip explain the issue and direct the user to Meta Ads Manager to enable it manually.
+    </div>
+
+    <h3>Scaling: Winner → Boost → Main</h3>
+    <ul>
+      <li>From the <strong>Purchase Test Winners</strong> column, choose <strong>Launch boost campaign</strong> to move creatives to Boost.</li>
+      <li>From Boost: <strong>Move to main</strong> to enter the Main stage with at least one main campaign. Additional main campaigns can be added over time.</li>
+      <li>From Boost: <strong>Stop boost → Move to kill</strong> for underperforming creatives.</li>
+    </ul>
+
+    <h3>Archive and Restore</h3>
+    <table>
+      <thead><tr><th>Action</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Archive</strong></td><td>Moves the creative to Archived for the selected platform(s). Available from the No Test column. If the creative has both Meta and TikTok, choose which channels to archive.</td></tr>
+        <tr><td><strong>Restore</strong></td><td>In the Creative Archive tab, creatives are shown in Meta and TikTok columns. Use Restore to move a creative back to No Test for that platform.</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="cp-notion"></span>
+    <h2>Notion Integration</h2>
+    <p>If Notion is configured, the creative detail dialog shows additional context under the General tab: short description of the creative and an explanation or link from Notion.</p>
+
+    <span class="section-anchor" id="cp-navigation"></span>
+    <h2>Navigation</h2>
+    <p>From the left sidebar in Adcelerate:</p>
+    <ol>
+      <li>Select an <strong>App</strong> using the App dropdown at the top.</li>
+      <li>Open the <strong>Creative Pipeline</strong> main page to create a new test and view the Meta and TikTok pipeline boards.</li>
+      <li>Open <strong>Creative Archive</strong> to view and restore archived creatives.</li>
+    </ol>
+    <p>Use the <strong>search box</strong> above the pipeline boards to filter creatives by name. Toggle <strong>Show Losers</strong> and <strong>Show Killed</strong> to reveal or hide those columns.</p>
+
+  </div>
+</section>
+
+<section id="page-sync-creatives" class="page" data-label="Sync Creatives" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Sync Creatives</span>
+    </div>
+    <h1>Sync Creatives <span class="badge badge-live">Live</span></h1>
+    <p class="page-scope">Automated creative distribution from Dropbox to Meta, TikTok, YouTube, Google Ads, and AppLovin with scheduled and manual sync modes.</p>
+
+    <span class="section-anchor" id="sc-summary"></span>
+    <h2>Overview</h2>
+    <p>Performance marketing teams produce creative assets (videos, images, playable HTML ads) and store them in Dropbox. Getting these files into each ad platform's asset library — Meta, TikTok, YouTube, Google Ads, and AppLovin — is tedious when done manually, especially when the same creative needs to go to multiple accounts across multiple platforms.</p>
+    <p><strong>Sync Creatives</strong> automates this distribution. It reads files from Dropbox, uploads them to the selected platforms in parallel, tracks what has already been uploaded to avoid duplicates, and feeds new creatives into the Creative Pipeline so they are immediately available for testing and campaign creation.</p>
+    <p>The system runs automatically every 3 hours and can also be triggered manually with fine-grained control over which apps, folders, platforms, and time ranges to sync.</p>
+
+    <span class="section-anchor" id="sc-goals"></span>
+    <h2>2. Goals &amp; Success Metrics</h2>
+    <table>
+      <thead><tr><th>Goal</th><th>Success Metric</th></tr></thead>
+      <tbody>
+        <tr><td>Eliminate manual uploads to ad platforms</td><td>Reduction in time spent uploading creatives per platform</td></tr>
+        <tr><td>Keep platforms in sync with Dropbox</td><td>Time lag between Dropbox upload and platform availability</td></tr>
+        <tr><td>Prevent duplicate uploads</td><td>Zero unintended duplicate assets across accounts</td></tr>
+        <tr><td>Feed the Creative Pipeline automatically</td><td>New creatives appearing in "No Test" stage without manual intervention</td></tr>
+        <tr><td>Provide visibility into sync results</td><td>Slack notification adoption and error resolution rate</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="sc-platforms"></span>
+    <h2>3. Supported Platforms</h2>
+    <table>
+      <thead><tr><th>Platform</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta / Facebook</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Videos and images uploaded to each Meta ad account</td></tr>
+        <tr><td><strong>TikTok</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Videos (9:16 only) uploaded to each TikTok advertiser</td></tr>
+        <tr><td><strong>YouTube</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Videos uploaded to the app's YouTube channel</td></tr>
+        <tr><td><strong>Google Ads</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Images uploaded directly; videos created as assets referencing YouTube uploads</td></tr>
+        <tr><td><strong>AppLovin</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>9:16 creatives and playable HTML ads uploaded to each AppLovin account</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="sc-concepts"></span>
+    <h2>4. Key Concepts</h2>
+
+    <h3>Dropbox Folders</h3>
+    <p>Each app has two types of folders configured in Settings:</p>
+    <ul>
+      <li><strong>Creative Folders</strong> (<code>dbxFolders</code>): Videos and images synced to all platforms</li>
+      <li><strong>Playable Folders</strong> (<code>dbxPlayableFolders</code>): HTML5 playable ads synced to AppLovin only</li>
+    </ul>
+
+    <h3>Sync Methods</h3>
+    <p>Three ways to specify which creatives to sync:</p>
+    <ul>
+      <li><strong>By number of days:</strong> All files modified within the last N days</li>
+      <li><strong>By specific creatives:</strong> Exact creative names (bypasses date filtering)</li>
+      <li><strong>By date range:</strong> Files modified within a custom start/end date window</li>
+    </ul>
+
+    <h3>Automated Sync</h3>
+    <p>A cron job runs every 3 hours, syncing the last 24 hours of files from all apps to Facebook, TikTok, and AppLovin.</p>
+
+    <h3>Duplicate Detection</h3>
+    <p>Before uploading, the system checks Firestore for existing platform-specific upload records. Already-uploaded files are skipped and reported as "already uploaded."</p>
+
+    <h3>Pipeline Integration</h3>
+    <p>When a creative is synced, it automatically enters the Creative Pipeline at the "No Test" stage for Meta and/or TikTok, ready for testing.</p>
+
+    <span class="section-anchor" id="sc-flow"></span>
+    <h2>5. How Sync Relates to Other Features</h2>
+    <p>Sync Creatives is the <strong>entry point</strong> of the creative workflow:</p>
+    <ol>
+      <li><strong>Sync Creatives</strong> uploads files from Dropbox to ad platforms</li>
+      <li>Synced creatives enter the <strong>Creative Pipeline</strong> at "No Test" stage</li>
+      <li>The <strong>Creative Feed</strong> (used by Copy Ads and Campaign Creation) pulls from synced creatives</li>
+      <li><strong>Copy Ads</strong> places synced creatives into specific ad sets</li>
+    </ol>
+    <div class="callout callout-tip"><strong>Rule of thumb:</strong> Sync first, then use creatives in campaigns.</div>
+
+    <span class="section-anchor" id="sc-architecture"></span>
+    <h2>6. Technical Architecture</h2>
+    <table>
+      <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+      <tbody>
+        <tr><td>Source</td><td>Dropbox API (file listing, download, metadata)</td></tr>
+        <tr><td>Platform APIs</td><td>Meta Marketing API, TikTok Ads API, YouTube Data API, Google Ads API, AppLovin Media Library API</td></tr>
+        <tr><td>Storage</td><td>Firebase Firestore (creative records with per-platform upload tracking)</td></tr>
+        <tr><td>Reporting</td><td>BigQuery (<code>creative_durations</code> table for video metadata)</td></tr>
+        <tr><td>Scheduler</td><td>Cron job running every 3 hours</td></tr>
+        <tr><td>Notifications</td><td>Slack Web API (DM to triggering user)</td></tr>
+        <tr><td>Authentication</td><td>Firebase Auth + API key middleware</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="sc-limitations"></span>
+    <h2>7. Known Limitations &amp; Future Considerations</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Current State</th><th>Future</th></tr></thead>
+      <tbody>
+        <tr><td>Source storage</td><td>Dropbox only (Google Drive UI exists but disabled)</td><td>Consider enabling Google Drive</td></tr>
+        <tr><td>TikTok retry</td><td>No automatic retry on upload errors</td><td>Add retry logic similar to Meta</td></tr>
+        <tr><td>Real-time sync</td><td>Runs every 3 hours or manually</td><td>Consider Dropbox webhooks for instant sync</td></tr>
+        <tr><td>Playable platforms</td><td>AppLovin only</td><td>Explore playable support on other platforms</td></tr>
+        <tr><td>Concurrency</td><td>5 files at a time (memory constraint)</td><td>Scale with streaming uploads to reduce memory</td></tr>
+        <tr><td>YouTube accounts</td><td>One per app</td><td>Consider multi-channel support</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="page-copy-ads" class="page" data-label="Copy Ads" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Copy Ads</span>
+    </div>
+    <h1>Copy Ads <span class="badge badge-live">Live</span></h1>
+    <p class="page-scope">Bulk ad duplication tool that copies creatives into multiple ad sets across Meta and TikTok in a single operation.</p>
+
+    <span class="section-anchor" id="ca-summary"></span>
+    <h2>Overview</h2>
+    <p>Performance marketers frequently need to place the same video creatives into multiple ad sets or ad groups across Meta and TikTok. Doing this manually through each platform's ads manager is slow, error-prone, and does not scale when managing dozens of ad sets.</p>
+    <p><strong>Copy Ads</strong> lets users select creatives from a creative feed and copy them into one or more ad sets in a single operation. The system uses an existing ad as a template, swaps in the new video, handles duplicate detection, and reports per-ad results with retry capabilities.</p>
+
+    <span class="section-anchor" id="ca-goals"></span>
+    <h2>2. Goals &amp; Success Metrics</h2>
+    <table>
+      <thead><tr><th>Goal</th><th>Success Metric</th></tr></thead>
+      <tbody>
+        <tr><td>Reduce manual ad creation time</td><td>Time saved per copy operation vs. manual creation in ads manager</td></tr>
+        <tr><td>Eliminate duplicate ad creation errors</td><td>Zero unintended duplicate ads created</td></tr>
+        <tr><td>Enable rapid creative scaling</td><td>Number of creatives deployed per session</td></tr>
+        <tr><td>Provide full visibility into copy results</td><td>Adoption of results popup and clipboard copy feature</td></tr>
+        <tr><td>Support both Meta and TikTok workflows</td><td>Platform coverage across active campaigns</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="ca-platforms"></span>
+    <h2>3. Supported Platforms</h2>
+    <table>
+      <thead><tr><th>Platform</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta / Facebook</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Standard ads with multi-size video support (9:16, 4:5)</td></tr>
+        <tr><td><strong>TikTok</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Regular ads, ACO (Smart Creative), and Upgraded Smart+</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="ca-concepts"></span>
+    <h2>4. Key Concepts</h2>
+
+    <h3>Template Ad</h3>
+    <p>Every target ad set must contain at least one ad. Copy Ads picks the first active ad and uses it as a template — only the video (and name) change. All other configuration (copy text, links, CTAs, tracking) is inherited from the template.</p>
+
+    <h3>Creative Feed</h3>
+    <p>The creative feed component lets users browse and select creatives by time period or name search. It is platform-aware and shows the correct creatives for Meta or TikTok. Supports bulk select/deselect.</p>
+
+    <h3>Duplicate Detection</h3>
+    <p>Before creating an ad, the system checks if an ad with the same creative name already exists in the target. Duplicates are skipped and reported, making re-runs safe.</p>
+
+    <h3>Ad Naming Convention</h3>
+    <p>On Meta, ad names follow the pattern <code>{creativeName}__{DD/MM/YYYY}</code> with the date appended automatically. On TikTok, the creative name is used as-is.</p>
+
+    <span class="section-anchor" id="ca-wizard"></span>
+    <h2>5. Wizard Flow</h2>
+    <p>A four-step wizard guides the user through the copy operation:</p>
+    <ol>
+      <li><strong>App &amp; Account</strong> — select the app and ad account</li>
+      <li><strong>Ad Sets</strong> — select one or more target ad sets</li>
+      <li><strong>Creatives</strong> — browse the creative feed and select videos to copy</li>
+      <li><strong>Review &amp; Copy</strong> — confirm the selection and submit</li>
+    </ol>
+    <p>A selection summary sidebar is visible throughout to keep track of what's been selected.</p>
+
+    <span class="section-anchor" id="ca-architecture"></span>
+    <h2>6. Technical Architecture</h2>
+    <table>
+      <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td>React wizard with step indicator and selection summary</td></tr>
+        <tr><td>Platform APIs</td><td>Meta Marketing API (Graph API batch requests), TikTok Ads API</td></tr>
+        <tr><td>Video Storage</td><td>Videos must be pre-uploaded to ad accounts on each platform (via Sync Creatives)</td></tr>
+        <tr><td>Thumbnails</td><td>Meta: inherited from template. TikTok: auto-generated via suggested cover API</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="ca-limitations"></span>
+    <h2>7. Known Limitations &amp; Future Considerations</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Current State</th><th>Future</th></tr></thead>
+      <tbody>
+        <tr><td>Image creatives</td><td>Video-only support</td><td>Consider adding image/carousel support</td></tr>
+        <tr><td>Cross-account copying</td><td>Single ad account per operation</td><td>Explore multi-account batch operations</td></tr>
+        <tr><td>Scheduling</td><td>Manual trigger only</td><td>Consider scheduled/automated copy operations</td></tr>
+        <tr><td>TikTok retry</td><td>No automatic retry on transient errors</td><td>Add retry logic similar to Meta (up to 5 retries)</td></tr>
+        <tr><td>Smart+ detection</td><td>Auto-detected from app settings</td><td>Consider exposing as explicit toggle</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="page-campaign-creation" class="page" data-label="Campaign Creation" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Campaign Creation</span>
+    </div>
+    <h1>Campaign Creation <span class="badge badge-live">Live</span></h1>
+    <p class="page-scope">Template-based campaign creation wizard that builds and launches full campaign hierarchies on Meta and TikTok in a single operation.</p>
+
+    <span class="section-anchor" id="cc-summary"></span>
+    <h2>Overview</h2>
+    <p>Launching ad campaigns on Meta and TikTok requires configuring a hierarchy of objects — campaign, ad sets/ad groups, and ads — each with targeting, budgets, creatives, and platform-specific settings. Doing this manually through each platform's ads manager is slow, error-prone, and hard to standardize across teams.</p>
+    <p><strong>Campaign Creation</strong> provides a six-step wizard that lets users select a pre-built template, customize campaign settings, assign creatives from the Creative Feed, review the configuration, and submit. The system handles all API calls to create the full campaign hierarchy on the platform, supports AI translation of ad copy (Meta), inline Facebook page creation, and reports partial failures so users know exactly what succeeded and what failed.</p>
+
+    <span class="section-anchor" id="cc-goals"></span>
+    <h2>2. Goals &amp; Success Metrics</h2>
+    <table>
+      <thead><tr><th>Goal</th><th>Success Metric</th></tr></thead>
+      <tbody>
+        <tr><td>Reduce campaign setup time</td><td>Time from template selection to live campaign</td></tr>
+        <tr><td>Standardize campaign structure across the team</td><td>Template reuse rate and consistency of settings</td></tr>
+        <tr><td>Enable rapid creative testing</td><td>Number of purchase test campaigns created per week</td></tr>
+        <tr><td>Reduce manual configuration errors</td><td>Reduction in campaign setup mistakes vs. native ads managers</td></tr>
+        <tr><td>Support both Meta and TikTok workflows</td><td>Platform coverage across active campaigns</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="cc-platforms"></span>
+    <h2>3. Supported Platforms</h2>
+    <table>
+      <thead><tr><th>Platform</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta / Facebook</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Standard (BAU) and Advantage+ App (AAA) campaigns. AI translation, page creation, asset feed spec.</td></tr>
+        <tr><td><strong>TikTok</strong></td><td><span class="badge badge-live">Fully supported</span></td><td>Custom, Smart Performance (SPC), and Upgraded Smart+ campaigns. Copy-based creation from source campaigns.</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="cc-concepts"></span>
+    <h2>4. Key Concepts</h2>
+
+    <h3>Templates</h3>
+    <p>Saved campaign configurations stored in Firestore. Meta templates store the full configuration directly. TikTok templates reference a source campaign ID, and the system fetches the full config from that campaign at creation time.</p>
+
+    <h3>Campaign Hierarchy</h3>
+    <p>Both platforms follow: <strong>Campaign → Ad Set/Ad Group → Ad → Creative</strong> (videos, copy, CTAs).</p>
+
+    <h3>Campaign Types</h3>
+    <table>
+      <thead><tr><th>Type</th><th>Platform</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>BAU</strong></td><td>Meta</td><td>Standard campaigns with full control over ad sets, targeting, and optimization.</td></tr>
+        <tr><td><strong>AAA</strong></td><td>Meta</td><td>Advantage+ App Campaigns where Meta's algorithm handles targeting. Limited to one ad set.</td></tr>
+        <tr><td><strong>Custom</strong></td><td>TikTok</td><td>Copy-based creation from a source campaign via task API.</td></tr>
+        <tr><td><strong>SPC</strong></td><td>TikTok</td><td>Smart Performance campaigns with simplified configuration.</td></tr>
+        <tr><td><strong>Smart+</strong></td><td>TikTok</td><td>Upgraded Smart+ with separate campaign, ad group, and ad creation via Smart+ APIs.</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="cc-wizard"></span>
+    <h2>5. Wizard Flow</h2>
+    <p>A six-step wizard guides the user through campaign creation:</p>
+    <ol>
+      <li><strong>Template</strong> — select a pre-built campaign template</li>
+      <li><strong>Campaign</strong> — configure campaign-level settings (name, budget, objective)</li>
+      <li><strong>Ad Sets / Groups</strong> — configure ad set targeting, budgets, schedules</li>
+      <li><strong>Ad Settings</strong> — copy, links, CTAs, tracking parameters</li>
+      <li><strong>Creatives</strong> — assign creatives from the Creative Feed</li>
+      <li><strong>Review &amp; Create</strong> — confirm configuration and submit</li>
+    </ol>
+
+    <span class="section-anchor" id="cc-related"></span>
+    <h2>6. How Campaign Creation Relates to Other Features</h2>
+    <p>Campaign Creation sits downstream of Sync Creatives and the Creative Pipeline:</p>
+    <ol>
+      <li><strong>Sync Creatives</strong> uploads files from Dropbox to ad platforms</li>
+      <li>Synced creatives enter the <strong>Creative Pipeline</strong> at "No Test" stage</li>
+      <li><strong>Campaign Creation</strong> builds and launches campaigns with those creatives</li>
+      <li><strong>Copy Ads</strong> can later add more creatives to existing ad sets</li>
+    </ol>
+
+    <span class="section-anchor" id="cc-architecture"></span>
+    <h2>7. Technical Architecture</h2>
+    <table>
+      <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+      <tbody>
+        <tr><td>Frontend</td><td>React six-step wizard with step indicator and selection summary</td></tr>
+        <tr><td>Templates</td><td>Firestore (<code>meta-templates</code>, <code>tiktok-templates</code> collections)</td></tr>
+        <tr><td>Platform APIs</td><td>Meta Marketing API (Graph API), TikTok Ads API (copy task, SPC, Smart+ endpoints)</td></tr>
+        <tr><td>AI Translation</td><td>OpenAI API for title and body text translation (Meta only)</td></tr>
+        <tr><td>Page Creation</td><td>Meta Pages API for inline Facebook page creation</td></tr>
+        <tr><td>Task Polling</td><td>TikTok copy task status endpoint for async campaign creation</td></tr>
+        <tr><td>Authentication</td><td>Firebase Auth + API key middleware</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="cc-limitations"></span>
+    <h2>8. Known Limitations &amp; Future Considerations</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Current State</th><th>Future</th></tr></thead>
+      <tbody>
+        <tr><td>Template management</td><td>Separate pages for Meta and TikTok</td><td>Consider unified template management</td></tr>
+        <tr><td>TikTok targeting</td><td>Inherited from source campaign, not configurable</td><td>Explore adding targeting configuration</td></tr>
+        <tr><td>TikTok translation</td><td>Not supported server-side</td><td>Consider adding AI translation for TikTok</td></tr>
+        <tr><td>Campaign activation</td><td>Meta campaigns created as PAUSED, separate activation call</td><td>Consider auto-activation option</td></tr>
+        <tr><td>Budget units</td><td>Meta uses cents, TikTok uses platform currency</td><td>Document clearly to avoid confusion</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="page-performance-tracking" class="page" data-label="Performance Tracking" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Performance Tracking</span>
+    </div>
+    <h1>Performance Tracking <span class="badge badge-live">Live</span></h1>
+    <p class="page-scope">BigQuery-powered analytics dashboard that unifies ad spend and attribution data across Meta, TikTok, Google Ads, AppLovin, and Snapchat with hourly ingestion, custom queries, and AI-generated newsletters.</p>
+
+    <span class="section-anchor" id="pt-summary"></span>
+    <h2>Overview</h2>
+    <p>Performance marketers need a unified view of advertising performance across multiple platforms. Checking each platform's ads manager individually is slow, inconsistent, and makes cross-platform comparison impossible. Attribution data lives in a separate system (Adjust), adding another layer of complexity.</p>
+    <p><strong>Performance Tracking</strong> solves this by ingesting cost data from Meta, TikTok, Google Ads, AppLovin, and Snapchat every hour, joining it with Adjust attribution data (installs, purchases, revenue) in BigQuery, and exposing it through a custom query builder. Users can slice data by any combination of dimensions, apply filters, save queries for reuse, and create automation rules directly from results.</p>
+
+    <span class="section-anchor" id="pt-goals"></span>
+    <h2>2. Goals &amp; Success Metrics</h2>
+    <table>
+      <thead><tr><th>Goal</th><th>Success Metric</th></tr></thead>
+      <tbody>
+        <tr><td>Provide a single source of truth for ad performance</td><td>Reduction in time spent switching between platform dashboards</td></tr>
+        <tr><td>Enable real-time performance monitoring</td><td>Data freshness within 1 hour of platform reporting</td></tr>
+        <tr><td>Support fast decision-making</td><td>Time from performance signal to action (rule creation, budget change)</td></tr>
+        <tr><td>Automate daily performance reporting</td><td>AI newsletter adoption and engagement rate</td></tr>
+        <tr><td>Feed creative-level metrics into the pipeline</td><td>Per-creative CPP/CPI/spend accuracy in pipeline stages</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="pt-platforms"></span>
+    <h2>3. Supported Platforms</h2>
+    <table>
+      <thead><tr><th>Platform</th><th>Cost Data</th><th>Attribution Data</th><th>Granularity</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta (Facebook)</strong></td><td>Yes</td><td>Yes (via Adjust)</td><td>Hourly, per ad</td></tr>
+        <tr><td><strong>TikTok</strong></td><td>Yes</td><td>Yes (via Adjust)</td><td>Hourly, per ad</td></tr>
+        <tr><td><strong>Google Ads</strong></td><td>Yes</td><td>Yes (via Adjust)</td><td>Hourly, per campaign</td></tr>
+        <tr><td><strong>AppLovin</strong></td><td>Yes</td><td>Yes (via Adjust)</td><td>Hourly, per campaign</td></tr>
+        <tr><td><strong>Snapchat</strong></td><td>Yes</td><td>Yes (via Adjust)</td><td>Hourly, per ad</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="pt-concepts"></span>
+    <h2>4. Key Concepts</h2>
+
+    <h3>Metrics</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Formula</th></tr></thead>
+      <tbody>
+        <tr><td>CPP (Cost Per Purchase)</td><td><code>cost / purchases</code></td></tr>
+        <tr><td>CPI (Cost Per Install)</td><td><code>cost / installs</code></td></tr>
+        <tr><td>D0 ROAS (Return on Ad Spend)</td><td><code>revenue / cost</code></td></tr>
+        <tr><td>Spend</td><td><code>SUM(cost)</code></td></tr>
+        <tr><td>Installs</td><td><code>SUM(installs)</code></td></tr>
+        <tr><td>Purchases</td><td><code>SUM(purchases)</code></td></tr>
+      </tbody>
+    </table>
+    <p>All computed metrics use <code>SAFE_DIVIDE</code> in BigQuery to handle division by zero.</p>
+
+    <h3>App Mapping</h3>
+    <p>Each platform uses its own identifiers. The <code>mapping_app_id</code> table in BigQuery maps all platform-specific IDs to a single canonical <code>app_id</code>, refreshed from app settings every hour.</p>
+
+    <h3>Data Freshness</h3>
+    <p>Cost and attribution data refresh at :45 past each hour. Creative pipeline metrics refresh on the hour. The AI newsletter generates daily at 3 AM with final data from the previous day.</p>
+
+    <h3>In-Memory Cache</h3>
+    <p>API query results are cached for 1 hour (keyed by query parameters + date). Identical requests return cached results without hitting BigQuery.</p>
+
+    <span class="section-anchor" id="pt-related"></span>
+    <h2>5. How Performance Tracking Relates to Other Features</h2>
+    <ul>
+      <li><strong>Rules Automation</strong> evaluates conditions against the same BigQuery tables (<code>adjustDataTableName</code>)</li>
+      <li><strong>Creative Pipeline</strong> receives per-creative CPP, CPI, and spend via the hourly metrics job</li>
+      <li><strong>Settings</strong> provides the ad account IDs and <code>adjustId</code> that gate which apps are tracked</li>
+      <li>The dashboard's <strong>Create Automation</strong> action links directly to the Rule Builder</li>
+    </ul>
+
+    <span class="section-anchor" id="pt-architecture"></span>
+    <h2>6. Technical Architecture</h2>
+    <table>
+      <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+      <tbody>
+        <tr><td>Data Warehouse</td><td>Google BigQuery (staging tables + unified view)</td></tr>
+        <tr><td>Cost Data</td><td>Meta Marketing API, TikTok Reporting API, Google Ads API, AppLovin Reporting API, Snapchat Campaign Stats API</td></tr>
+        <tr><td>Attribution</td><td>Adjust Reports API</td></tr>
+        <tr><td>Scheduler</td><td>Cron jobs (hourly at :45, hourly at :00, daily at 3 AM, every 4 hours)</td></tr>
+        <tr><td>API Cache</td><td>In-memory with 1-hour TTL</td></tr>
+        <tr><td>Saved Queries</td><td>Firestore with <code>onSnapshot</code> listener for instant reads</td></tr>
+        <tr><td>AI Content</td><td>OpenAI API for newsletter generation</td></tr>
+        <tr><td>Authentication</td><td>Firebase Auth + API key middleware</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="pt-limitations"></span>
+    <h2>7. Known Limitations &amp; Future Considerations</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Current State</th><th>Future</th></tr></thead>
+      <tbody>
+        <tr><td>Data granularity</td><td>Google Ads and AppLovin are campaign-level only</td><td>Explore ad-level breakdowns where APIs support it</td></tr>
+        <tr><td>Historical range</td><td>Dashboard focused on today/yesterday/last week</td><td>Consider multi-day and custom date range queries</td></tr>
+        <tr><td>Timezone</td><td>Manual selection (UTC or UTC+3)</td><td>Consider per-app timezone auto-detection</td></tr>
+        <tr><td>Cache</td><td>1-hour in-memory TTL</td><td>Consider Redis for multi-instance deployments</td></tr>
+        <tr><td>Newsletter delivery</td><td>Stored in Firestore, fetched via API</td><td>Consider email or Slack delivery</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="page-marketing-analytics-times" class="page" data-label="Marketing Analytics Times" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Marketing Analytics Times</span>
+    </div>
+    <h1>Marketing Analytics Times <span class="badge badge-live">Live</span></h1>
+    <p class="page-scope">AI-powered daily newsletter dashboard that presents yesterday's marketing performance in a newspaper-style format with budget monitoring, Looker integration, and platform-wide analytics.</p>
+
+    <span class="section-anchor" id="mat-summary"></span>
+    <h2>Overviewy</h2>
+    <p>Performance marketers need a quick, digestible overview of how their apps performed yesterday — without manually pulling data from multiple ad platforms. They also need proactive alerts when budgets shift unexpectedly and access to deeper BI dashboards for ad-hoc analysis.</p>
+    <p><strong>Marketing Analytics Times</strong> solves this with an AI-powered newspaper-style dashboard that automatically generates daily performance summaries per app. The system collects spend and attribution data hourly from Meta, TikTok, Google Ads, AppLovin, and Snapchat, joins it with Adjust attribution in BigQuery, and runs it through OpenAI to produce headlines, insights, recommendations, and outlooks. A companion Budget Tracker monitors budget changes across platforms and sends Slack alerts, while Looker integration provides pre-built BI dashboards for deeper analysis.</p>
+
+    <span class="section-anchor" id="mat-goals"></span>
+    <h2>2. Goals &amp; Success Metrics</h2>
+    <table>
+      <thead><tr><th>Goal</th><th>Success Metric</th></tr></thead>
+      <tbody>
+        <tr><td>Deliver daily AI-driven performance summaries</td><td>Newsletter coverage across all tracked apps</td></tr>
+        <tr><td>Enable rapid morning performance reviews</td><td>Time from page open to actionable insight</td></tr>
+        <tr><td>Alert on significant budget changes</td><td>Budget alert response time</td></tr>
+        <tr><td>Provide access to deeper BI analysis</td><td>Looker dashboard usage via proxy</td></tr>
+        <tr><td>Surface top spending ads and creatives</td><td>Identification of scaling candidates</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="mat-components"></span>
+    <h2>3. Components Overview</h2>
+    <table>
+      <thead><tr><th>Component</th><th>Purpose</th><th>Schedule</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AI Newsletter</strong></td><td>Generates daily performance insights per app</td><td>Daily at 3 AM</td><td>Firestore documents</td></tr>
+        <tr><td><strong>Newsletter Dashboard</strong></td><td>Newspaper-style UI with cover cards and detail modals</td><td>On-demand</td><td>Web page</td></tr>
+        <tr><td><strong>Budget Tracker (deprecated)</strong></td><td>Monitors budget changes, sends Slack alerts</td><td>Hourly at :45 (data) / :05 (alerts)</td><td>Slack notifications</td></tr>
+        <tr><td><strong>Looker Integration</strong></td><td>Pre-built BI dashboards via proxy</td><td>On-demand</td><td>JSON responses</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="mat-concepts"></span>
+    <h2>4. Key Concepts</h2>
+
+    <h3>AI Newsletter Document</h3>
+    <p>Each document contains:</p>
+    <ul>
+      <li><strong>aiContent:</strong> headline, summary, outlook, key insights, recommendations, data summary</li>
+      <li><strong>newsletterData:</strong> yesterday totals, platform breakdowns, most spending entities</li>
+      <li><strong>processedAt:</strong> timestamp</li>
+    </ul>
+
+    <h3>Metrics</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Formula</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Cost</td><td><code>SUM(cost)</code></td><td>Platform APIs</td></tr>
+        <tr><td>Purchases</td><td><code>SUM(purchases)</code></td><td>Adjust</td></tr>
+        <tr><td>CPP</td><td><code>cost / purchases</code></td><td>Calculated</td></tr>
+        <tr><td>CPI</td><td><code>cost / installs</code></td><td>Calculated</td></tr>
+        <tr><td>D0 ROAS</td><td><code>revenue / cost</code></td><td>Calculated</td></tr>
+        <tr><td>Installs</td><td><code>SUM(installs)</code></td><td>Adjust</td></tr>
+        <tr><td>Revenue</td><td><code>SUM(revenue)</code></td><td>Adjust</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Comparisons</h3>
+    <p>The system automatically calculates:</p>
+    <ul>
+      <li><strong>Today vs Yesterday</strong> — percentage change for each metric</li>
+      <li><strong>Today vs Last Week Same Day</strong> — to account for weekly patterns</li>
+    </ul>
+
+    <span class="section-anchor" id="mat-architecture"></span>
+    <h2>5. Technical Architecture</h2>
+    <table>
+      <thead><tr><th>Component</th><th>Technology</th></tr></thead>
+      <tbody>
+        <tr><td>Data Warehouse</td><td>Google BigQuery (staging tables + unified view + budget tracking)</td></tr>
+        <tr><td>AI Engine</td><td>OpenAI API for newsletter content generation</td></tr>
+        <tr><td>BI Dashboards</td><td>Looker with <code>light_marketing</code> model</td></tr>
+        <tr><td>Newsletter Storage</td><td>Firestore (<code>adcelerate-daily-ai-newspapers/{appId}/days/{date}</code>)</td></tr>
+        <tr><td>Budget Alerts</td><td>BigQuery scheduled queries + Slack API</td></tr>
+        <tr><td>API Cache</td><td>In-memory with 1-hour TTL (SHA-1 keyed)</td></tr>
+        <tr><td>Authentication</td><td>Firebase Auth + API key, <code>performance</code> role required</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="mat-limitations"></span>
+    <h2>6. Known Limitations &amp; Future Considerations</h2>
+    <table>
+      <thead><tr><th>Area</th><th>Current State</th><th>Future</th></tr></thead>
+      <tbody>
+        <tr><td>Date range</td><td>Dashboard shows yesterday only</td><td>Consider historical date picker</td></tr>
+        <tr><td>Newsletter idempotency</td><td>Once generated, won't regenerate for same date</td><td>Consider force-regenerate option</td></tr>
+        <tr><td>Budget platforms</td><td>Meta, TikTok, Google Ads</td><td>Add AppLovin and Snapchat budget tracking</td></tr>
+        <tr><td>Creative previews</td><td>Depends on Dropbox link availability</td><td>Fallback to platform thumbnail</td></tr>
+        <tr><td>Looker PDT freshness</td><td>Periodic rebuilds with health checks</td><td>Consider real-time materialized views</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="page-ip-shield" class="page" data-label="IP Shield" data-group="Features">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>IP Shield</span>
+    </div>
+    <h1>IP Shield <span class="badge badge-dev">In Dev</span></h1>
+    <p class="page-scope">Two-part initiative automating IP infringement reporting and implementing technical video identification layers to protect Codeway creative assets.</p>
+
+    <div class="callout callout-warning">
+      This feature is currently under active development. Some capabilities described here may not yet be fully live in production.
+    </div>
+
+    <span class="section-anchor" id="ip-overview"></span>
+    <h2>Overview</h2>
+    <p>The IP Shield feature is a two-part strategic initiative for Adcelerate. It provides a robust defense against ad jackers by automating the legal reporting process and implementing technical video identification layers. This ensures Codeway creative assets remain protected and easily attributable.</p>
+
+    <span class="section-anchor" id="ip-part1"></span>
+    <h2>Part 1: IP Infringement Automated Reporting</h2>
+    <p>Removes manual friction from IP enforcement by interfacing with the Meta IP Reporting API.</p>
+
+    <h3>The Problem — Current Manual Process (5 Steps)</h3>
+    <ol>
+      <li><strong>Discovery:</strong> Find infringing ads via Meta Ads Library</li>
+      <li><strong>Report:</strong> Manually fill the IP report form for each ad (~15 min per report)</li>
+      <li><strong>Documentation:</strong> Log the report in Google Sheets</li>
+      <li><strong>Email loop:</strong> Respond to Meta follow-up emails with additional information</li>
+      <li><strong>Escalation:</strong> Submit page takedown requests for repeat offenders</li>
+    </ol>
+    <p>Total time per report: approximately 20 minutes. Volume is difficult to scale manually.</p>
+
+    <h3>The Solution — Automated Workflow</h3>
+    <ul>
+      <li><strong>One-click report generation</strong> via the Meta IP Reporting API</li>
+      <li><strong>Automated Google Sheets documentation</strong> of every report submitted</li>
+      <li><strong>Page takedown escalation</strong> for repeat offenders</li>
+    </ul>
+
+    <h3>Success OKRs</h3>
+    <ul>
+      <li>Reduce average time per Meta report from <strong>20 minutes to under 3 minutes</strong></li>
+      <li>Increase total number of reports opened by <strong>at least 50%</strong> during the first month of use</li>
+    </ul>
+
+    <span class="section-anchor" id="ip-part2"></span>
+    <h2>Part 2: Creative Ownership Attribution System</h2>
+    <p>A progressive three-phase system for proving video ownership. Each phase escalates technical sophistication only when the previous is insufficient.</p>
+
+    <table>
+      <thead><tr><th>Phase</th><th>Method</th><th>Detects</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Phase 1</strong></td><td>Metadata tagging</td><td>Baseline attribution — embeds ownership info in video metadata</td></tr>
+        <tr><td><strong>Phase 2</strong></td><td>SHA-256 hash-based matching</td><td>Exact copies — binary-identical files</td></tr>
+        <tr><td><strong>Phase 3</strong></td><td>Invisible DCT watermarking</td><td>Modified copies — re-encoded, cropped, or filtered videos</td></tr>
+      </tbody>
+    </table>
+
+    <h3>DCT Watermarking (Phase 3)</h3>
+    <p>Discrete Cosine Transform (DCT) watermarking embeds an invisible pattern in the video that survives re-encoding, color changes, and minor cropping. This is the most technically sophisticated phase, used when hash matching is insufficient.</p>
+
+    <h3>Success OKRs</h3>
+    <ul>
+      <li>Achieve <strong>99% detection accuracy</strong> for exact video copies using hash-based matching</li>
+      <li>Detect at least <strong>80% of modified or re-encoded videos</strong> that previously bypassed hash-based detection</li>
+    </ul>
+
+  </div>
+</section>
+
+<section id="page-manifesto" class="page" data-label="Manifesto" data-group="Reference">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>Manifesto</span>
+    </div>
+    <h1>Adcelerate Manifesto</h1>
+    <p class="page-scope">Adcelerate's vision, market positioning, product principles, and maturity framework for the unified performance marketing platform.</p>
+
+    <span class="section-anchor" id="mf-situation"></span>
+    <h2>Current Situation</h2>
+    <p>Adcelerate operates in the rapidly expanding performance marketing market where global digital ad spend continues aggressive growth on platforms such as Meta, Google, and TikTok. As privacy regulations and AI-powered algorithms fundamentally change how ads are served, the complexity of managing profitable campaigns has reached an all-time high.</p>
+    <p>The current market is defined by extreme tool fragmentation. Marketing teams are forced to jump between disconnected applications for creative management, tracking, manual campaign launching, and third-party automation. This fragmented workflow leads to data silos, high operational overhead, and leaky budgets where inefficient spend goes unnoticed for days.</p>
+    <p>Adcelerate is uniquely positioned to disrupt this status quo. Our vision is to provide a single application for the entire performance marketing lifecycle. By consolidating in a unified value proposition, we help apps achieve three primary goals:</p>
+    <ul>
+      <li><strong>Reduced latency to launch:</strong> Moving from creative concept to live campaign in days rather than weeks.</li>
+      <li><strong>Elimination of budget waste:</strong> Using real-time cross-platform automation to kill underperforming spend instantly.</li>
+      <li><strong>Scaled insights:</strong> Bridging the gap between asset production, campaign management, and performance data.</li>
+    </ul>
+
+    <span class="section-anchor" id="mf-market"></span>
+    <h2>Market Drivers and Positioning</h2>
+    <p>We are benefiting from significant market tailwinds: the rise of short-form video, the shift toward server-side tracking, and the urgent need for AI-driven optimization that outpaces manual human management.</p>
+    <p>A critical dynamic reshaping the market is <strong>creative iteration speed</strong>. Creative is no longer just an asset management problem — it is the main optimization loop. Winning apps are defined by how fast they can learn from creative signals and iterate. As algorithms prioritize new creative variations, apps face rapid creative fatigue. Without a structured system for creative iteration and learning, even strong campaigns saturate quickly.</p>
+
+    <span class="section-anchor" id="mf-value"></span>
+    <h2>The Unified Value Proposition</h2>
+    <p>By owning the entire marketing cycle, Adcelerate provides a level of visibility and control that point solutions cannot match. We do not just provide features — we provide a complete operating system for performance marketing.</p>
+
+    <img src="https://storage.googleapis.com/adcelerate-images-codeway/MarketingOpsWheel.png" alt="Marketing Ops Wheel" style="width: 100%; height: auto;">
+    <table>
+      <thead><tr><th>Stage</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Strategy</strong></td><td>Build media plans and forecast performance based on historical data before launching a single ad.</td></tr>
+        <tr><td><strong>2. Creative Ops</strong></td><td>Creation, management, and syncing of assets. Bridge between idea and deployment.</td></tr>
+        <tr><td><strong>3. Implementation</strong></td><td>Automate campaign setup using reusable templates. Eliminate human error in manual platform setups.</td></tr>
+        <tr><td><strong>4. Activation</strong></td><td>Single command center to launch and manage campaigns across Meta and TikTok.</td></tr>
+        <tr><td><strong>5. Automation</strong></td><td>Intelligent rules that scale winning ads and pause losing ones in real time. The pilot that never sleeps.</td></tr>
+        <tr><td><strong>6. Intelligence</strong></td><td>Real-time performance tracking and AI-driven insights that flow back into the Strategy stage.</td></tr>
+      </tbody>
+    </table>
+
+
+    <span class="section-anchor" id="mf-challenges"></span>
+    <h2>Strategic Challenges</h2>
+
+    <h3>Tension Between Breadth and Depth</h3>
+    <p>Our ambitious single-application vision means we need to build feature value across a very large surface area. The challenge is to drive the right balance between breadth and depth by retaining a "seed then nurture" approach in new product areas while simultaneously improving existing tools that generate high daily usage.</p>
+
+    <h3>Diverse Application Profiles and Global Reach</h3>
+    <p>We serve a wide range of applications at different lifecycle stages — from early-stage apps looking for their first users to massive global hits managing hundreds of active campaigns. This diversity makes our business complex and creates difficulty in optimizing the UX for all app sizes.</p>
+
+    <h3>Platform Ecosystem Dependency</h3>
+    <p>A significant challenge is our reliance on the APIs and policies of external giants such as Meta, Adjust, and Apple. These platforms frequently change their data-sharing rules and technical requirements, which can impact our product functionality overnight.</p>
+
+    <h3>Internal Value vs. B2B Features</h3>
+    <p>Adcelerate currently serves as a critically important internal platform for Codeway. Our long-term goal is to transition into a standalone B2B SaaS platform. This creates a significant prioritization tension between building features that give Codeway a competitive edge and building a generalized, scalable architecture for external customers.</p>
+
+    <span class="section-anchor" id="mf-principles"></span>
+    <h2>Product Principles</h2>
+
+    <h3>We Are User Zero and Use Our Own Product</h3>
+    <p>Everything we build for Adcelerate should be a tool that our own marketing team at Codeway would use. If a feature does not provide immediate value to our internal efforts, we must challenge its existence.</p>
+
+    <h3>We Are Design-Led for Performance</h3>
+    <p>Most marketing tools are cluttered and difficult to navigate. We prioritize user experience as a core differentiator. It does not matter how powerful our automation is if it is too complex for a new marketer to master.</p>
+
+    <h3>We Value Precision Over Velocity</h3>
+    <p>In the world of paid advertising, mistakes cost real money. We do not ship incomplete or buggy features just to hit a deadline. Everything we release must be user-validated and free of errors that could lead to wasted ad spend.</p>
+
+    <h3>We Value Data Over Intuition and Anecdotes</h3>
+    <p>Every feature we build must have traceable success metrics to prove it provides value. We measure outcomes like reduced setup time or increased ROAS rather than just counting the number of launches.</p>
+
+    <h3>We Fail Fast and Iterate with Intention</h3>
+    <p>We define clear hypotheses for new features and validate them quickly. If a hypothesis is proven wrong, we pivot immediately.</p>
+
+    <h3>We Win Only When the User Wins</h3>
+    <p>Success is not defined by our code being pushed to production but by our users seeing a positive ROAS or having more time to focus on growth.</p>
+
+    <span class="section-anchor" id="mf-maturity"></span>
+    <h2>Adcelerate Maturity Framework</h2>
+    <p>We have developed this maturity framework to help navigate the tension between breadth and depth. By categorizing features based on their integration into our internal workflows, we can make more informed prioritization decisions.</p>
+
+    <table>
+      <thead><tr><th>Level</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Planned</strong></td>
+          <td>The feature exists only as a conceptual entry on the product roadmap or within design prototypes. No functional code in production yet.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Experimental</strong></td>
+          <td>The feature is live in production but is treated as an alpha version undergoing limited testing by a single app. Significant product/engineering support usually required.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Vertical Standard</strong></td>
+          <td>The feature has matured into the official primary method for at least one entire vertical at Codeway. The old way of achieving the result is officially discouraged for these teams.</td>
+        </tr>
+        <tr>
+          <td><strong>4. Codeway Standard</strong></td>
+          <td>The feature has achieved company-wide adoption and has replaced legacy workflows across all verticals. It is now considered mission-critical infrastructure for the entire organization.</td>
+        </tr>
+        <tr>
+          <td><strong>5. SaaS Ready</strong></td>
+          <td>The feature has reached the level of polish and architectural flexibility required for the external B2B market. Functions independently of any Codeway-specific internal logic.</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
+
+<section id="page-general-settings" class="page" data-label="General Settings" data-group="Reference">
+  <div class="page-content">
+    <div class="breadcrumb">
+      <a href="#page-index">Adcelerate Onboarding</a>
+      <span>›</span>
+      <span>General Settings</span>
+    </div>
+    <h1>General Settings</h1>
+    <p class="page-scope">Central app configuration hub: app identity, store URLs, Settings API, storage and caching, Snapchat integration, performance tracking, and cross-cutting fields used by multiple features.</p>
+
+    <span class="section-anchor" id="gs-overview"></span>
+    <h2>Overview</h2>
+    <p>Settings is the central configuration layer for the entire system. Every app — along with its ad accounts, Dropbox folders, performance tracking, and platform connections — is defined here. Settings are stored in Firestore and served from an in-memory cache, making reads instant and changes propagated in real time.</p>
+    <p>Each feature has its own Settings sub-spec documenting the fields it depends on. This page covers the <strong>cross-cutting settings</strong> that are shared across multiple features or don't belong to a single feature.</p>
+
+    <div class="callout">
+      <strong>Important:</strong> Settings are not schema-validated on write. A typo in a field name won't cause an error but will silently break consuming features.
+    </div>
+
+    <span class="section-anchor" id="gs-app-identity"></span>
+    <h2>App Identity</h2>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>appId</code></td><td>string</td><td>Canonical app identifier (e.g. <code>com.codeway.aitutor</code>). Also used as the Firestore document ID.</td></tr>
+        <tr><td><code>name</code></td><td>string</td><td>Display name for the app (used in notifications, reports, and the UI)</td></tr>
+        <tr><td><code>creativeCode</code></td><td>string</td><td>Short code used to identify this app's creatives in naming conventions</td></tr>
+        <tr><td><code>adjustId</code></td><td>string</td><td>Adjust app ID for attribution tracking. Apps without <code>adjustId</code> are excluded from performance tracking.</td></tr>
+        <tr><td><code>vertical</code></td><td>string</td><td>Category/vertical for organizing apps in the system</td></tr>
+      </tbody>
+    </table>
+    <p>When creating a new app, <code>name</code>, <code>appId</code>, and <code>creativeCode</code> are required.</p>
+
+    <span class="section-anchor" id="gs-performance"></span>
+    <h2>Performance Tracking Fields</h2>
+    <p>These fields gate access to the performance tracking ecosystem. They are used by Rules Automation, Creative Pipeline, the hourly performance tracker, budget tracker, and AI newsletter.</p>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>adjustId</code></td><td>string</td><td>Without this, the app is invisible to the performance tracker, budget tracker, and AI newsletter.</td></tr>
+        <tr><td><code>adjustDataTableName</code></td><td>string</td><td>BigQuery table for Adjust data. Used by automation rules for evaluation and by the pipeline for creative metrics.</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="gs-bm"></span>
+    <h2>Business Manager Mapping</h2>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>metaAdAccountMap</code></td><td>object</td><td>Maps each Meta ad account ID to its Business Manager name (e.g. <code>{ "575011933319228": "BM_NAME" }</code>). Used to select the correct API access token.</td></tr>
+        <tr><td><code>bmName</code></td><td>string</td><td>Legacy Business Manager name. Some older features use this instead of <code>metaAdAccountMap</code>.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warning">
+      <code>metaAdAccountMap</code> is critical for API authentication. A wrong mapping causes auth failures across all Meta features (Copy Ads, Campaign Creation, Budget Tracker).
+    </div>
+
+    <span class="section-anchor" id="gs-storage"></span>
+    <h2>Storage &amp; Caching</h2>
+    <p>App settings are stored in the Firestore collection <strong><code>adcelerate-apps</code></strong>. Each document represents one app.</p>
+    <p>Settings are loaded into an <strong>in-memory cache</strong> at server startup via a Firestore <code>onSnapshot</code> listener:</p>
+    <ul>
+      <li><strong>Reads are instant</strong> — <code>getAllApps()</code> and <code>getAppById()</code> serve from memory</li>
+      <li><strong>Changes propagate automatically</strong> — create, update, or delete events are reflected within seconds</li>
+      <li><strong>No manual refresh or server restart needed</strong></li>
+    </ul>
+
+    <span class="section-anchor" id="gs-api"></span>
+    <h2>Settings API</h2>
+    <table>
+      <thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>GET</code></td><td><code>/api/v1/settings/apps</code></td><td>List all apps</td></tr>
+        <tr><td><code>GET</code></td><td><code>/api/v1/settings/apps/:id</code></td><td>Get a single app by ID</td></tr>
+        <tr><td><code>POST</code></td><td><code>/api/v1/settings/apps</code></td><td>Create a new app (uses <code>req.body.appId</code> as document ID)</td></tr>
+        <tr><td><code>PUT</code></td><td><code>/api/v1/settings/apps/:id</code></td><td>Partial update (only sent fields are changed)</td></tr>
+        <tr><td><code>DELETE</code></td><td><code>/api/v1/settings/apps/:id</code></td><td>Delete an app</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Authentication:</strong> Firebase ID token + API key + origin check. Required role: <code>performance</code> or <code>admin</code>.</p>
+
+    <span class="section-anchor" id="gs-impact"></span>
+    <h2>Impact of Misconfiguration</h2>
+    <table>
+      <thead><tr><th>If This Field Is Wrong...</th><th>...This Breaks</th></tr></thead>
+      <tbody>
+        <tr><td><code>metaAdAccountMap</code> has wrong BM name</td><td>All Meta API calls fail with auth errors</td></tr>
+        <tr><td><code>adjustId</code> missing</td><td>App excluded from performance tracking, budget tracker, AI newsletter</td></tr>
+        <tr><td><code>adjustDataTableName</code> missing</td><td>Automation rules can't evaluate; creative metrics won't populate</td></tr>
+        <tr><td><code>tiktokSmartAdAccounts</code> missing an ID</td><td>Smart+ campaigns processed via wrong flow</td></tr>
+        <tr><td><code>metaAdAccountNames</code> / <code>tiktokAdAccountNames</code> missing</td><td>UI and notifications show raw IDs instead of readable names</td></tr>
+      </tbody>
+    </table>
+
+    <span class="section-anchor" id="gs-dependencies"></span>
+    <h2>Feature Dependencies</h2>
+    <pre><code>Settings (adcelerate-apps)
+│
+├── Sync Creatives       → dbxFolders, dbxPlayableFolders, metaIds, tiktok, googleAdsIds, applovinAccountIds
+├── Copy Ads             → metaAdAccountMap, tiktok, tiktokSmartAdAccounts
+├── Campaign Creation    → metaAdAccountMap, pageIds, pixels, links, tiktokSmartAdAccounts
+├── Creative Pipeline    → dbxFolders, adjustDataTableName, metaIds, tiktok
+├── Rules Automation     → adjustDataTableName, metaAdAccountNames, tiktokAdAccountNames, name
+├── IP Shield            → ipShield* fields (owner, tracking, templates)
+├── Hourly Perf Tracker  → adjustId, metaIds, tiktok, googleAdsIds, snapchatAdAccountIds
+├── Budget Tracker       → metaAdAccountMap, bmName, tiktok, googleAdsIds
+└── AI Newsletter        → adjustId, name, appId, dbxFolders</code></pre>
+
+  </div>
+</section>
+
+</main>
+</div>
+<script>
+/* ========== ROUTER ========== */
+(function() {
+  var links = document.querySelectorAll('.sidebar-nav-link[data-target]');
+  var pages = document.querySelectorAll('.page');
+
+  function showPage(targetId) {
+    pages.forEach(function(p) {
+      if (p.id === targetId) { p.classList.add('visible'); }
+      else { p.classList.remove('visible'); }
+    });
+    links.forEach(function(l) {
+      if (l.dataset.target === targetId) { l.classList.add('active'); }
+      else { l.classList.remove('active'); }
+    });
+    document.getElementById('main-content').scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+
+  function getTargetFromHash() {
+    var hash = window.location.hash.replace('#', '');
+    if (!hash) return null;
+    var page = document.getElementById(hash);
+    if (page && page.classList.contains('page')) return hash;
+    if (page) {
+      var parent = page.closest('.page');
+      if (parent) return parent.id;
+    }
+    return null;
+  }
+
+  function handleHash() {
+    var target = getTargetFromHash();
+    if (!target) {
+      var first = document.querySelector('.page');
+      if (first) target = first.id;
+    }
+    if (target) showPage(target);
+    var hash = window.location.hash.replace('#', '');
+    if (hash && hash !== target) {
+      setTimeout(function() {
+        var el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  }
+
+  links.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = this.dataset.target;
+      window.location.hash = target;
+      showPage(target);
+      window.scrollTo(0, 0);
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest('a[href^="#page-"]');
+    if (!a) return;
+    e.preventDefault();
+    var target = a.getAttribute('href').replace('#', '');
+    var page = document.getElementById(target);
+    if (page && page.classList.contains('page')) {
+      window.location.hash = target;
+      showPage(target);
+      window.scrollTo(0, 0);
+    }
+  });
+
+  window.addEventListener('hashchange', handleHash);
+  handleHash();
+})();
+
+/* ========== READING CHECKLIST ========== */
+(function() {
+  var STORAGE_KEY = 'adcelerate-onboarding-read';
+
+  function loadRead() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch(e) { return []; }
+  }
+  function saveRead(arr) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  var checks = document.querySelectorAll('.page-check');
+  var readPages = loadRead();
+  checks.forEach(function(cb) {
+    if (readPages.indexOf(cb.dataset.page) !== -1) cb.checked = true;
+    cb.addEventListener('change', function() {
+      var pages = loadRead();
+      var idx = pages.indexOf(this.dataset.page);
+      if (this.checked && idx === -1) pages.push(this.dataset.page);
+      else if (!this.checked && idx !== -1) pages.splice(idx, 1);
+      saveRead(pages);
+    });
+  });
+})();
+
+/* ========== COLLAPSIBLE SECTIONS ========== */
+(function() {
+  var STORAGE_KEY = 'adcelerate-onboarding-collapsed';
+
+  function loadCollapsed() {
+    try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch(e) { return []; }
+  }
+  function saveCollapsed(arr) {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  var collapsed = loadCollapsed();
+
+  document.querySelectorAll('.page-content').forEach(function(content) {
+    var pageId = content.closest('.page') ? content.closest('.page').id : 'unknown';
+    var h2s = Array.from(content.querySelectorAll('h2'));
+
+    h2s.forEach(function(h2, idx) {
+      var sectionKey = pageId + ':' + idx;
+
+      // Collect siblings between this h2 and the next h2
+      var siblings = [];
+      var next = h2.nextSibling;
+      while (next && next.nodeName !== 'H2') {
+        siblings.push(next);
+        next = next.nextSibling;
+      }
+      if (siblings.length === 0) return;
+
+      // Wrap siblings in a section-body div
+      var body = document.createElement('div');
+      body.className = 'section-body';
+      h2.parentNode.insertBefore(body, h2.nextSibling);
+      siblings.forEach(function(s) { body.appendChild(s); });
+
+      // Open state: large max-height so content shows
+      body.style.maxHeight = '9999px';
+
+      // Mark h2 as collapsible
+      h2.setAttribute('data-collapsible', '');
+
+      // Restore collapsed state from session
+      if (collapsed.indexOf(sectionKey) !== -1) {
+        body.style.maxHeight = '0';
+        h2.classList.add('h2-collapsed');
+      }
+
+      h2.addEventListener('click', function() {
+        var isCollapsed = h2.classList.contains('h2-collapsed');
+        var c = loadCollapsed();
+        if (isCollapsed) {
+          body.style.maxHeight = '9999px';
+          h2.classList.remove('h2-collapsed');
+          var i = c.indexOf(sectionKey);
+          if (i !== -1) c.splice(i, 1);
+        } else {
+          body.style.maxHeight = '0';
+          h2.classList.add('h2-collapsed');
+          if (c.indexOf(sectionKey) === -1) c.push(sectionKey);
+        }
+        saveCollapsed(c);
+      });
+    });
+  });
+})();
+
+/* ========== COPY ON CLICK ========== */
+(function() {
+  var toast = document.createElement('div');
+  toast.className = 'copy-toast';
+  toast.textContent = 'Copied to clipboard';
+  document.body.appendChild(toast);
+  var toastTimer;
+
+  function showToast() {
+    clearTimeout(toastTimer);
+    toast.classList.add('show');
+    toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 1500);
+  }
+
+  function copyText(text, codeEl) {
+    codeEl.classList.add('code-copied');
+    showToast();
+    setTimeout(function() { codeEl.classList.remove('code-copied'); }, 1200);
+    _ = text; // suppress lint
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(function() {});
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+  }
+
+  document.querySelectorAll('.page-content code').forEach(function(code) {
+    code.title = 'Click to copy';
+    code.addEventListener('click', function(e) {
+      e.stopPropagation();
+      copyText(this.textContent, this);
+    });
+  });
+})();
+
+/* ========== GUIDED TOUR (Driver.js) ========== */
+(function() {
+  // Navigate to a given page ID programmatically (mirrors the router)
+  function goToPage(pageId) {
+    document.querySelectorAll('.page').forEach(function(p) {
+      p.classList.toggle('visible', p.id === pageId);
+    });
+    document.querySelectorAll('.sidebar-nav-link[data-target]').forEach(function(l) {
+      l.classList.toggle('active', l.dataset.target === pageId);
+    });
+    window.location.hash = pageId;
+    window.scrollTo(0, 0);
+  }
+
+  function fireWelcomeConfetti() {
+    if (typeof confetti === 'undefined') return;
+    var colors = ['#0052CC', '#00875A', '#ffffff', '#FFF0B3', '#B3D4FF'];
+    confetti({ particleCount: 60, spread: 80, origin: { x: 0.2, y: 0.5 }, colors: colors });
+    setTimeout(function() {
+      confetti({ particleCount: 60, spread: 80, origin: { x: 0.8, y: 0.5 }, colors: colors });
+    }, 200);
+    setTimeout(function() {
+      confetti({ particleCount: 30, spread: 120, origin: { x: 0.5, y: 0.3 }, colors: colors });
+    }, 400);
+  }
+
+  function startTour() {
+    // Ensure the index page is shown for steps 1-3
+    goToPage('page-index');
+
+    var driverObj = window.driver.js.driver({
+      showProgress: true,
+      animate: true,
+      allowClose: true,
+      overlayOpacity: 0.65,
+      popoverClass: 'driverjs-theme',
+      steps: [
+        {
+          popover: {
+            title: 'Welcome to the team, Eren!',
+            description: 'We\'re really excited to have you on board.<br><br>This document will help you understand <strong>Adcelerate</strong>, covering everything from how the team works to deep dives on every feature.<br><br>Read through at your own pace. The quick tour below will show you how to get the most out of this document.',
+            popoverClass: 'driverjs-theme driverjs-welcome',
+            nextBtnText: 'Start the tour →',
+            showButtons: ['next']
+          },
+          onHighlightStarted: function() {
+            fireWelcomeConfetti();
+          }
+        },
+        {
+          element: '#sidebar',
+          popover: {
+            title: 'Navigation',
+            description: 'Use the sidebar to navigate between the 11 sections of this onboarding. Active page is highlighted in blue.',
+            side: 'right',
+            align: 'start'
+          }
+        },
+        {
+          element: '#search-input',
+          popover: {
+            title: 'Global Search',
+            description: 'Search across every page in real time. Type a feature name, concept, or keyword — matches highlight inline across all pages.',
+            side: 'bottom',
+            align: 'end'
+          }
+        },
+        {
+          element: '.page-check',
+          popover: {
+            title: 'Reading Checklist',
+            description: 'Check pages off as you read them. Your progress is saved in the browser across sessions.',
+            side: 'right',
+            align: 'start'
+          }
+        },
+        {
+          element: '#sidebar',
+          popover: {
+            title: 'Feature Specs',
+            description: 'Each feature in the sidebar links to its full spec — covering goals, architecture, limitations, and workflows. Click one now to explore.',
+            side: 'right',
+            align: 'center'
+          },
+          onHighlightStarted: function() {
+            // Navigate to the Rules Automation page so steps 4-5 have targets
+            goToPage('page-rules-automation');
+          }
+        },
+        {
+          popover: {
+            title: 'Collapsible Sections',
+            description: 'Click any H2 heading to collapse or expand that section. Useful on long spec pages when you want to focus on specific areas.',
+            side: 'bottom',
+            align: 'start'
+          }
+        },
+        {
+          popover: {
+            title: 'Copy Anything',
+            description: 'Click any code snippet, URL, or pattern to instantly copy it to clipboard. A green flash confirms the copy.',
+            side: 'bottom',
+            align: 'start'
+          }
+        },
+        {
+          popover: {
+            title: 'You\'re all set!',
+            description: 'You\'re ready to start learning about Adcelerate. Take your time exploring each section — there\'s a lot to discover.<br><br>Whenever you want a refresher on these features, just click the <strong>✦ Tour</strong> button in the top right corner.',
+            popoverClass: 'driverjs-theme driverjs-welcome',
+            nextBtnText: 'Let\'s go →',
+            showButtons: ['next', 'close']
+          },
+          onHighlightStarted: function() {
+            goToPage('page-index');
+          }
+        }
+      ],
+      onDestroyed: function() {
+        localStorage.setItem('adcelerate-tour-seen', '1');
+        // Return to index after tour
+        goToPage('page-index');
+      }
+    });
+
+    driverObj.drive();
+  }
+
+  // "Take the tour" button
+  var tourBtn = document.getElementById('tour-btn');
+  if (tourBtn) tourBtn.addEventListener('click', startTour);
+
+  // Auto-start on first visit (after a short delay so page is settled)
+  if (!localStorage.getItem('adcelerate-tour-seen')) {
+    setTimeout(startTour, 600);
+  }
+})();
+
+/* ========== GLOBAL SEARCH ========== */
+(function() {
+  var input = document.getElementById('search-input');
+  var results = document.getElementById('search-results');
+  if (!input || !results) return;
+
+  var allPages = Array.from(document.querySelectorAll('.page'));
+  var pageLabels = {};
+  document.querySelectorAll('.sidebar-nav-link[data-target]').forEach(function(l) {
+    pageLabels[l.dataset.target] = l.textContent.trim();
+  });
+
+  var activeMarks = [];
+
+  function clearMarks() {
+    activeMarks.forEach(function(m) {
+      var parent = m.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(m.textContent), m);
+        parent.normalize();
+      }
+    });
+    activeMarks = [];
+  }
+
+  function getTextNodes(el) {
+    var nodes = [];
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node) {
+        var p = node.parentElement;
+        if (!p) return NodeFilter.FILTER_REJECT;
+        var tag = p.tagName;
+        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'MARK') return NodeFilter.FILTER_REJECT;
+        return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    return nodes;
+  }
+
+  function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  function expandAllSections(page) {
+    page.querySelectorAll('h2.h2-collapsed').forEach(function(h2) {
+      h2.click();
+    });
+  }
+
+  function search(query) {
+    clearMarks();
+    results.innerHTML = '';
+    results.classList.remove('open');
+    if (!query || query.length < 2) return;
+
+    var re = new RegExp(escapeRe(query), 'gi');
+    var matches = [];
+
+    allPages.forEach(function(page) {
+      var content = page.querySelector('.page-content');
+      if (!content) return;
+      var nodes = getTextNodes(content);
+      nodes.forEach(function(node) {
+        var text = node.textContent;
+        if (!re.test(text)) { re.lastIndex = 0; return; }
+        re.lastIndex = 0;
+
+        // Build highlighted fragment
+        var frag = document.createDocumentFragment();
+        var last = 0;
+        var re2 = new RegExp(escapeRe(query), 'gi');
+        var m;
+        while ((m = re2.exec(text)) !== null) {
+          if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+          var mark = document.createElement('mark');
+          mark.textContent = m[0];
+          frag.appendChild(mark);
+          activeMarks.push(mark);
+          last = m.index + m[0].length;
+        }
+        if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+        node.parentNode.replaceChild(frag, node);
+
+        // Collect snippet for results
+        var firstIdx = text.search(new RegExp(escapeRe(query), 'i'));
+        var start = Math.max(0, firstIdx - 40);
+        var snippet = (start > 0 ? '…' : '') + text.slice(start, firstIdx + 80) + (firstIdx + 80 < text.length ? '…' : '');
+        matches.push({ pageId: page.id, snippet: snippet });
+      });
+    });
+
+    if (matches.length === 0) {
+      results.innerHTML = '<div class="search-no-results">No results for "' + query + '"</div>';
+    } else {
+      var shown = 0;
+      var seenPages = {};
+      matches.forEach(function(match) {
+        if (shown >= 8) return;
+        var item = document.createElement('div');
+        item.className = 'search-result-item';
+        var label = pageLabels[match.pageId] || match.pageId;
+        var snippetHtml = match.snippet.replace(new RegExp(escapeRe(query), 'gi'), function(m) {
+          return '<mark>' + m + '</mark>';
+        });
+        item.innerHTML =
+          '<div class="search-result-page">' + label + '</div>' +
+          '<div class="search-result-snippet">' + snippetHtml + '</div>';
+        item.addEventListener('click', function() {
+          // Navigate to page
+          allPages.forEach(function(p) { p.classList.remove('visible'); });
+          var targetPage = document.getElementById(match.pageId);
+          if (targetPage) {
+            targetPage.classList.add('visible');
+            expandAllSections(targetPage);
+          }
+          document.querySelectorAll('.sidebar-nav-link[data-target]').forEach(function(l) {
+            l.classList.toggle('active', l.dataset.target === match.pageId);
+          });
+          window.location.hash = match.pageId;
+          window.scrollTo(0, 0);
+          // Scroll to first mark on this page
+          setTimeout(function() {
+            if (targetPage) {
+              var firstMark = targetPage.querySelector('mark');
+              if (firstMark) firstMark.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 60);
+          results.classList.remove('open');
+          input.value = '';
+          clearMarks();
+        });
+        results.appendChild(item);
+        shown++;
+      });
+    }
+    results.classList.add('open');
+  }
+
+  var searchTimer;
+  input.addEventListener('input', function() {
+    clearTimeout(searchTimer);
+    var q = this.value.trim();
+    searchTimer = setTimeout(function() { search(q); }, 200);
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      this.value = '';
+      clearMarks();
+      results.classList.remove('open');
+      results.innerHTML = '';
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!input.contains(e.target) && !results.contains(e.target)) {
+      results.classList.remove('open');
+    }
+  });
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</body>
+</html>
